@@ -14,28 +14,28 @@ const navSections = [
   {
     title: "Filter by Price & Entry",
     links: [
-      { label: "Free Entry", href: "/venues?entry=free" },
-      { label: "Budget Friendly (<€10)", href: "/venues?price=budget" },
-      { label: "Mid-Range (€10-15)", href: "/venues?price=mid" },
-      { label: "Premium / VIP (>€15)", href: "/venues?price=premium" },
-      { label: "Paid Entry / Guestlist", href: "/venues?entry=paid" },
+      { label: "Free Entry", href: "/venues/?entry=free" },
+      { label: "Budget Friendly (<€10)", href: "/venues/?price=budget" },
+      { label: "Mid-Range (€10-15)", href: "/venues/?price=mid" },
+      { label: "Premium / VIP (>€15)", href: "/venues/?price=premium" },
+      { label: "Paid Entry / Guestlist", href: "/venues/?entry=paid" },
     ]
   },
   {
     title: "Filter by Atmosphere",
     links: [
-      { label: "Conversation Friendly", href: "/venues?noise=conversation" },
-      { label: "Loud & Energetic", href: "/venues?noise=loud" },
-      { label: "Club Level / Earplugs", href: "/venues?noise=earplugs" },
-      { label: "See All Venues", href: "/venues" },
+      { label: "Conversation Friendly", href: "/venues/?noise=conversation" },
+      { label: "Loud & Energetic", href: "/venues/?noise=loud" },
+      { label: "Club Level / Earplugs", href: "/venues/?noise=earplugs" },
+      { label: "See All Venues", href: "/venues/" },
     ]
   },
   {
     title: "Neighborhoods",
-    links: topNeighborhoods.length > 0 ? topNeighborhoods.map((n: any) => ({ label: n.name, href: `/venues?neighborhood=${n.slug}` })) : [
-        { label: "Malasaña", href: "/venues?neighborhood=malasana" },
-        { label: "Huertas", href: "/venues?neighborhood=huertas" },
-        { label: "Salamanca", href: "/venues?neighborhood=salamanca" }
+    links: topNeighborhoods.length > 0 ? topNeighborhoods.map((n: any) => ({ label: n.name, href: `/venues/?neighborhood=${n.slug}` })) : [
+        { label: "Malasaña", href: "/venues/?neighborhood=malasana" },
+        { label: "Huertas", href: "/venues/?neighborhood=huertas" },
+        { label: "Salamanca", href: "/venues/?neighborhood=salamanca" }
     ]
   }
 ];
