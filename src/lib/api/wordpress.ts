@@ -211,8 +211,8 @@ export async function getAllEvents() {
 export async function getPostBySlug(slug: string) {
   const data = await wpQuery({
     query: `
-        query GetPost($slug: ID!) {
-            post(id: $slug, idType: SLUG) {
+        query GetPost($uri: ID!) {
+            post(id: $uri, idType: URI) {
                 id
                 title
                 content
@@ -246,7 +246,7 @@ export async function getPostBySlug(slug: string) {
             }
         }
         `,
-    variables: { slug }
+    variables: { uri: slug }
   });
 
   return data?.post;

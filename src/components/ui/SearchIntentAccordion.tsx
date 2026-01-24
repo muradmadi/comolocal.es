@@ -21,28 +21,28 @@ const items: AccordionItem[] = [
         label: "Finding Cheap Student Parties in Madrid",
         content: "Madrid is famous for its nightlife, but it doesn't have to be expensive. We track the best happy hours, free entry guestlists, and low-cost cover charges specifically for the student budget. From the 1 euro beers at 100 Montaditos to free entry at Kapital before certain hours, our guide ensures you never overpay.",
         linkText: "Browse Budget Venues",
-        linkUrl: "/venues?price=budget"
+        linkUrl: "/venues/?price=budget"
     },
     {
         id: 'techno',
         label: "Best Techno and Underground Clubs",
         content: "If you're tired of commercial hits and seeking the thumping bass of proper techno, Madrid's underground scene delivers. We cover legendary spots like Fabrik, Mondo Disko, and secret warehouse raves. Discover where the locals dance until 7 AM.",
         linkText: "Explore Techno Clubs",
-        linkUrl: "/venues?noise=earplugs"
+        linkUrl: "/venues/?noise=earplugs"
     },
     {
         id: 'erasmus',
         label: "International Student Meetups & Erasmus",
         content: "Arriving in a new city can be daunting. Our curated list of Erasmus parties and international meetups helps you connect with fellow global students. Whether it's Monday night at City Hall or Thursday at Kapital, we know where the international crowd gathers.",
         linkText: "See Student Events",
-        linkUrl: "/events"
+        linkUrl: "/events/"
     },
     {
         id: 'dresscode',
         label: "Madrid Nightlife Dress Codes & Entry Rules",
         content: "Don't get turned away at the door. Madrid's bouncers can be strict. We provide detailed breakdowns of dress codes for every major venue—from 'casual chic' to 'strict elegance'. Know before you go to avoid the walk of shame.",
         linkText: "Read the Survival Guide",
-        linkUrl: "/blog"
+        linkUrl: "/blog/"
     }
 ];
 

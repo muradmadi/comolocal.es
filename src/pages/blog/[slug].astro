@@ -12,7 +12,8 @@ if (!slug) {
   return Astro.redirect('/404');
 }
 
-const post = await getPostBySlug(slug!);
+const uri = `/blog/${slug}/`;
+const post = await getPostBySlug(uri);
 
 if (!post) {
   return new Response(null, {
