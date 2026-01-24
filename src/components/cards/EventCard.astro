@@ -64,7 +64,7 @@ const startDate = event.eventData?.eventStart ? formatDate(event.eventData.event
         {event.title}
     </CardTitle>
     {venue && (
-        <a href={`/venues/${venue.slug}`} class="text-sm text-muted-foreground hover:text-primary transition-colors">
+        <a href={`/venues/${venue.slug}/`} class="text-sm text-muted-foreground hover:text-primary transition-colors">
             @ {venue.title}
         </a>
     )}
@@ -81,7 +81,7 @@ const startDate = event.eventData?.eventStart ? formatDate(event.eventData.event
   </CardContent>
 
   <CardFooter>
-    <a href={`/events/${event.slug}`} class="w-full">
+    <a href={`/events/${event.slug}/`} class="w-full">
       <Button variant="secondary" className="w-full group-hover:bg-primary group-hover:text-primary-foreground transition-colors">
           View Event
       </Button>

@@ -223,7 +223,7 @@ function VenueCard({ venue }: { venue: VenueData }) {
                         <span className="text-xs text-muted-foreground/60 italic">Check details inside</span>
                     </div>
 
-                    <a href={`/venues/${venue.slug}`} className="flex-shrink-0">
+                    <a href={`/venues/${venue.slug}/`} className="flex-shrink-0">
                         <Button className="group-hover:bg-primary group-hover:text-primary-foreground transition-colors">
                             View Details
                             <svg className="w-4 h-4 ml-1.5 transition-transform group-hover:translate-x-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>

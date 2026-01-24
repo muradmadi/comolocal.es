@@ -21,19 +21,19 @@ const sections = [
     icon: Home,
     links: [
       { name: 'Home', href: '/', description: 'Discover Madrid nightlife' },
-      { name: 'Venues', href: '/venues', description: 'Browse all bars & clubs' },
-      { name: 'Events', href: '/events', description: 'Upcoming parties & events' },
-      { name: 'Blog', href: '/blog', description: 'Guides & stories' },
-      { name: 'Map', href: '/map', description: 'Interactive venue map' },
-      { name: 'Contact', href: '/contact', description: 'Get in touch' },
+      { name: 'Venues', href: '/venues/', description: 'Browse all bars & clubs' },
+      { name: 'Events', href: '/events/', description: 'Upcoming parties & events' },
+      { name: 'Blog', href: '/blog/', description: 'Guides & stories' },
+      { name: 'Map', href: '/map/', description: 'Interactive venue map' },
+      { name: 'Contact', href: '/contact/', description: 'Get in touch' },
     ]
   },
   {
     title: 'Legal',
     icon: Shield,
     links: [
-      { name: 'Privacy Policy', href: '/privacy', description: 'How we handle your data' },
-      { name: 'Terms of Service', href: '/terms', description: 'Rules of using our site' },
+      { name: 'Privacy Policy', href: '/privacy/', description: 'How we handle your data' },
+      { name: 'Terms of Service', href: '/terms/', description: 'Rules of using our site' },
     ]
   }
 ];
@@ -53,7 +53,7 @@ const sections = [
       <!-- Intro -->
       <div class="bg-card/50 border border-border/50 rounded-2xl p-6 md:p-8 mb-12 backdrop-blur-sm">
         <p class="text-muted-foreground text-lg leading-relaxed">
-          Use this page to navigate all sections of ComoLocal. Looking for something specific? Try our <a href="/venues" class="text-primary hover:underline">venue search</a> or <a href="/map" class="text-primary hover:underline">interactive map</a>.
+          Use this page to navigate all sections of ComoLocal. Looking for something specific? Try our <a href="/venues/" class="text-primary hover:underline">venue search</a> or <a href="/map/" class="text-primary hover:underline">interactive map</a>.
         </p>
       </div>
 
@@ -93,12 +93,12 @@ const sections = [
                 <h2 class="text-2xl font-bold text-foreground">Venues</h2>
                 <span class="text-sm text-muted-foreground">({venues.length} total)</span>
               </div>
-              <a href="/venues" class="text-sm text-primary hover:underline">View all →</a>
+              <a href="/venues/" class="text-sm text-primary hover:underline">View all →</a>
             </div>
             <div class="grid gap-2 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
               {displayedVenues.map((venue) => (
                 <a 
-                  href={`/venues/${venue.slug}`} 
+                  href={`/venues/${venue.slug}/`} 
                   class="group flex items-center gap-3 bg-card/50 border border-border/30 rounded-lg p-3 hover:border-primary/50 hover:bg-card transition-all"
                 >
                   {venue.featuredImage?.node?.sourceUrl ? (
@@ -118,7 +118,7 @@ const sections = [
             </div>
             {venues.length > 12 && (
               <p class="text-sm text-muted-foreground mt-4 text-center">
-                + {venues.length - 12} more venues. <a href="/venues" class="text-primary hover:underline">See all</a>
+                + {venues.length - 12} more venues. <a href="/venues/" class="text-primary hover:underline">See all</a>
               </p>
             )}
           </section>
@@ -135,12 +135,12 @@ const sections = [
                 <h2 class="text-2xl font-bold text-foreground">Events</h2>
                 <span class="text-sm text-muted-foreground">({events.length} total)</span>
               </div>
-              <a href="/events" class="text-sm text-primary hover:underline">View all →</a>
+              <a href="/events/" class="text-sm text-primary hover:underline">View all →</a>
             </div>
             <div class="grid gap-2 sm:grid-cols-2 lg:grid-cols-3">
               {displayedEvents.map((event) => (
                 <a 
-                  href={`/events/${event.slug}`} 
+                  href={`/events/${event.slug}/`} 
                   class="group flex items-center gap-3 bg-card/50 border border-border/30 rounded-lg p-3 hover:border-primary/50 hover:bg-card transition-all"
                 >
                   <div class="w-10 h-10 rounded-lg bg-primary/10 flex items-center justify-center shrink-0">
@@ -152,7 +152,7 @@ const sections = [
             </div>
             {events.length > 6 && (
               <p class="text-sm text-muted-foreground mt-4 text-center">
-                + {events.length - 6} more events. <a href="/events" class="text-primary hover:underline">See all</a>
+                + {events.length - 6} more events. <a href="/events/" class="text-primary hover:underline">See all</a>
               </p>
             )}
           </section>
@@ -169,12 +169,12 @@ const sections = [
                 <h2 class="text-2xl font-bold text-foreground">Blog Posts</h2>
                 <span class="text-sm text-muted-foreground">({posts.length} total)</span>
               </div>
-              <a href="/blog" class="text-sm text-primary hover:underline">View all →</a>
+              <a href="/blog/" class="text-sm text-primary hover:underline">View all →</a>
             </div>
             <div class="grid gap-2 sm:grid-cols-2">
               {displayedPosts.map((post) => (
                 <a 
-                  href={`/blog/${post.slug}`} 
+                  href={`/blog/${post.slug}/`} 
                   class="group flex items-center gap-3 bg-card/50 border border-border/30 rounded-lg p-3 hover:border-primary/50 hover:bg-card transition-all"
                 >
                   {post.featuredImage?.node?.sourceUrl ? (
@@ -194,7 +194,7 @@ const sections = [
             </div>
             {posts.length > 8 && (
               <p class="text-sm text-muted-foreground mt-4 text-center">
-                + {posts.length - 8} more articles. <a href="/blog" class="text-primary hover:underline">See all</a>
+                + {posts.length - 8} more articles. <a href="/blog/" class="text-primary hover:underline">See all</a>
               </p>
             )}
           </section>
@@ -207,7 +207,7 @@ const sections = [
         <div class="bg-muted/20 rounded-xl p-6 text-center">
           <p class="text-sm text-muted-foreground">
             <strong class="text-foreground">For Search Engines:</strong> Our machine-readable XML sitemap is available at 
-            <a href="/sitemap-index.xml" class="text-primary hover:underline ml-1">/sitemap-index.xml</a>
+            <a href="/sitemap.xml" class="text-primary hover:underline ml-1">/sitemap.xml</a>
           </p>
         </div>
       </div>

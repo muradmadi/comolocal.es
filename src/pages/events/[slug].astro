@@ -1,0 +1,275 @@
+---
+import Layout from '@/layouts/Layout.astro';
+import Navbar from '@/components/layout/Navbar';
+import { Badge } from '@/components/ui/Badge';
+import { Button } from '@/components/ui/Button';
+import { Calendar, Clock, MapPin, ArrowLeft, Ticket, ExternalLink } from 'lucide-react';
+
+// 1. GET THE SLUG
+const { slug } = Astro.params;
+
+if (!slug) {
+  return Astro.redirect('/404/');
+}
+
+// 2. FETCH SINGLE EVENT WITH FULL VENUE DATA (SSR)
+const response = await fetch(import.meta.env.WORDPRESS_API_URL, {
+  method: 'POST',
+  headers: { 'Content-Type': 'application/json' },
+  body: JSON.stringify({
+    query: `
+      query GetEvent($slug: ID!) {
+        event(id: $slug, idType: SLUG) {
+          id
+          title
+          slug
+          content
+          featuredImage {
+            node {
+              sourceUrl
+              altText
+            }
+          }
+          eventData {
+            eventStart
+            eventEnd
+            ticketUrl
+            relatedVenue {
+              nodes {
+                ... on Venue {
+                  title
+                  slug
+                  featuredImage {
+                    node {
+                      sourceUrl
+                      altText
+                    }
+                  }
+                  venueSchemaData {
+                    officialWebsite
+                    cocktailPrice
+                    entryFeeStatus
+                  }
+                  neighborhoods {
+                    nodes {
+                      name
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    `,
+    variables: { slug }
+  }),
+});
+
+const { data } = await response.json();
+const event = data?.event;
+
+// 3. HANDLE 404
+if (!event) {
+  return new Response(null, {
+    status: 404,
+    statusText: 'Not Found'
+  });
+}
+
+// Helper data
+const image = event.featuredImage?.node?.sourceUrl;
+const alt = event.featuredImage?.node?.altText || event.title;
+const venue = event.eventData?.relatedVenue?.nodes?.[0];
+const venueImage = venue?.featuredImage?.node?.sourceUrl;
+const ticketUrl = event.eventData?.ticketUrl || venue?.venueSchemaData?.officialWebsite;
+
+function formatEventDate(dateString: string) {
+  if (!dateString) return null;
+  const date = new Date(dateString);
+  return {
+    full: date.toLocaleDateString('en-US', { 
+      weekday: 'long', 
+      month: 'long', 
+      day: 'numeric',
+      year: 'numeric'
+    }),
+    time: date.toLocaleTimeString('en-US', { 
+      hour: 'numeric', 
+      minute: '2-digit' 
+    }),
+    day: date.getDate(),
+    month: date.toLocaleDateString('en-US', { month: 'short' }),
+    weekday: date.toLocaleDateString('en-US', { weekday: 'short' })
+  };
+}
+
+const startDate = event.eventData?.eventStart ? formatEventDate(event.eventData.eventStart) : null;
+const endDate = event.eventData?.eventEnd ? formatEventDate(event.eventData.eventEnd) : null;
+---
+
+<Layout title={`${event.title} | Events | Comolocal`}>
+  <Navbar client:load />
+
+  <main class="min-h-screen bg-background">
+    
+    <!-- Back Link -->
+    <div class="container mx-auto px-4 pt-6">
+      <a href="/events/" class="inline-flex items-center gap-2 text-sm text-muted-foreground hover:text-foreground transition-colors">
+        <ArrowLeft className="w-4 h-4" />
+        Back to Events
+      </a>
+    </div>
+
+    <!-- Event Content -->
+    <div class="container mx-auto px-4 py-8 md:py-12">
+      <div class="max-w-4xl mx-auto">
+        
+        <!-- Header with Logo -->
+        <div class="flex flex-col md:flex-row gap-6 md:gap-8 items-start mb-10">
+          
+          <!-- Event Logo (Smaller) -->
+          <div class="w-32 h-32 md:w-40 md:h-40 rounded-2xl overflow-hidden bg-card border border-border/50 shrink-0 flex items-center justify-center">
+            {image ? (
+              <img 
+                src={image} 
+                alt={alt}
+                class="w-full h-full object-contain p-2"
+              />
+            ) : (
+              <div class="text-center p-4">
+                {startDate && (
+                  <>
+                    <span class="block text-4xl font-black text-primary">{startDate.day}</span>
+                    <span class="block text-sm uppercase font-bold text-muted-foreground">{startDate.month}</span>
+                  </>
+                )}
+              </div>
+            )}
+          </div>
+
+          <!-- Event Title & Meta -->
+          <div class="flex-1">
+            <h1 class="text-3xl md:text-4xl font-bold tracking-tight mb-3">
+              {event.title}
+            </h1>
+            
+            <!-- Date & Time Badges -->
+            <div class="flex flex-wrap items-center gap-3 mb-4">
+              {startDate && (
+                <Badge variant="secondary" className="text-sm px-3 py-1.5 gap-1.5">
+                  <Calendar className="w-3.5 h-3.5" />
+                  {startDate.full}
+                </Badge>
+              )}
+              {startDate && (
+                <Badge variant="outline" className="text-sm px-3 py-1.5 gap-1.5">
+                  <Clock className="w-3.5 h-3.5" />
+                  {startDate.time}{endDate && ` - ${endDate.time}`}
+                </Badge>
+              )}
+            </div>
+          </div>
+        </div>
+
+        <!-- Action Buttons Card -->
+        <div class="p-6 rounded-2xl bg-card border border-border/50 mb-10">
+          <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
+            {ticketUrl ? (
+              <a href={ticketUrl} target="_blank" rel="noopener noreferrer">
+                <Button className="w-full gap-2">
+                  <Ticket className="w-4 h-4" />
+                  Get Tickets
+                </Button>
+              </a>
+            ) : (
+              <Button className="w-full gap-2" disabled>
+                <Ticket className="w-4 h-4" />
+                Tickets N/A
+              </Button>
+            )}
+            
+            {venue && (
+              <a href={`/venues/${venue.slug}/`}>
+                <Button variant="secondary" className="w-full gap-2">
+                  <MapPin className="w-4 h-4" />
+                  View Venue
+                </Button>
+              </a>
+            )}
+            
+            <a href="/events/">
+              <Button variant="outline" className="w-full">
+                Browse All Events
+              </Button>
+            </a>
+          </div>
+        </div>
+
+        <!-- Event Description -->
+        {event.content && (
+          <section class="mb-12">
+            <div class="flex items-center gap-3 mb-6">
+              <div class="h-8 w-1 bg-primary rounded-full"></div>
+              <h2 class="text-2xl font-bold tracking-tight">About This Event</h2>
+            </div>
+            <div 
+              class="prose prose-zinc dark:prose-invert prose-lg max-w-none text-muted-foreground"
+              set:html={event.content} 
+            />
+          </section>
+        )}
+
+        <!-- Venue Reference Section -->
+        {venue && (
+          <section class="p-6 rounded-2xl bg-muted/30 border border-border/50">
+            <div class="flex items-center gap-3 mb-4">
+              <div class="h-6 w-1 bg-accent rounded-full"></div>
+              <h3 class="text-lg font-bold">Happening at</h3>
+            </div>
+            
+            <a href={`/venues/${venue.slug}/`} class="group flex items-center gap-4 p-4 rounded-xl bg-card border border-border/50 hover:border-primary/50 transition-colors">
+              <!-- Venue Image -->
+              <div class="w-16 h-16 rounded-lg overflow-hidden bg-muted shrink-0">
+                {venueImage ? (
+                  <img 
+                    src={venueImage} 
+                    alt={venue.title}
+                    class="w-full h-full object-cover"
+                  />
+                ) : (
+                  <div class="w-full h-full flex items-center justify-center text-2xl">📍</div>
+                )}
+              </div>
+              
+              <!-- Venue Info -->
+              <div class="flex-1 min-w-0">
+                <h4 class="font-bold text-lg group-hover:text-primary transition-colors truncate">
+                  {venue.title}
+                </h4>
+                <div class="flex items-center gap-2 text-sm text-muted-foreground">
+                  {venue.neighborhoods?.nodes?.[0] && (
+                    <span>{venue.neighborhoods.nodes[0].name}, Madrid</span>
+                  )}
+                  {venue.venueSchemaData?.cocktailPrice && (
+                    <>
+                      <span>•</span>
+                      <span>€{venue.venueSchemaData.cocktailPrice} drinks</span>
+                    </>
+                  )}
+                </div>
+              </div>
+              
+              <!-- Arrow -->
+              <div class="text-muted-foreground group-hover:text-primary transition-colors">
+                <ExternalLink className="w-5 h-5" />
+              </div>
+            </a>
+          </section>
+        )}
+
+      </div>
+    </div>
+
+  </main>
+</Layout>

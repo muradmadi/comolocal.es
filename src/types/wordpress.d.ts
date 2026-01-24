@@ -52,6 +52,7 @@ export interface Venue {
 export interface EventData {
     eventStart: string; // ISO Date String
     eventEnd: string; // ISO Date String
+    ticketUrl: string | null; // URL to purchase tickets
     relatedVenue: { nodes: Venue[] } | null;
 }
 

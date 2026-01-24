@@ -5,10 +5,10 @@ import logo from '../../assets/logo.svg';
 
 const navItems = [
     { name: 'Home', href: '/' },
-    { name: 'Blog', href: '/blog' },
-    { name: 'Venues', href: '/venues' },
-    { name: 'Events', href: '/events' },
-    { name: 'Map', href: '/map' },
+    { name: 'Blog', href: '/blog/' },
+    { name: 'Venues', href: '/venues/' },
+    { name: 'Events', href: '/events/' },
+    { name: 'Map', href: '/map/' },
 ];
 
 export default function Navbar() {
@@ -60,7 +60,7 @@ export default function Navbar() {
 
                         {/* CTA Button */}
                         <a
-                            href="/contact"
+                            href="/contact/"
                             className="inline-flex items-center gap-2 rounded-full bg-primary px-4 py-2 text-sm font-medium text-primary-foreground shadow-sm hover:bg-primary/90 transition-colors"
                         >
                             <MessageCircle className="h-4 w-4" />
@@ -94,7 +94,7 @@ export default function Navbar() {
                         ))}
                         {/* Mobile CTA */}
                         <a
-                            href="/contact"
+                            href="/contact/"
                             className="flex items-center gap-2 rounded-md px-3 py-2 text-base font-medium text-primary hover:bg-accent"
                         >
                             <MessageCircle className="h-4 w-4" />

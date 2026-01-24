@@ -183,6 +183,7 @@ export async function getAllEvents() {
                 eventData {
                     eventStart
                     eventEnd
+                    ticketUrl
                     relatedVenue {
                         nodes {
                             ... on Venue {

@@ -190,7 +190,7 @@ export default function InteractiveMap({ venues, initialZoom = 13, className }: 
                                         {venue.content?.replace(/(<([^>]+)>)/gi, "") || "No description available."}
                                     </p>
                                     <a
-                                        href={`/venues/${venue.slug}`}
+                                        href={`/venues/${venue.slug}/`}
                                         className="block w-full py-2 px-4 bg-primary !text-white text-center rounded-lg text-sm font-bold hover:bg-primary/90 transition-colors"
                                     >
                                         View Venue

@@ -175,7 +175,7 @@ export default function EventCalendar({ events }: EventCalendarProps) {
                                 return eventsOnDate.map(event => (
                                     <a
                                         key={event.id}
-                                        href={`/events/${event.slug}`}
+                                        href={`/events/${event.slug}/`}
                                         className="block p-3 rounded-lg bg-muted/30 border border-transparent hover:border-primary/50 hover:bg-muted/50 transition-all group"
                                     >
                                         <div className="font-semibold text-sm group-hover:text-primary transition-colors line-clamp-2">
