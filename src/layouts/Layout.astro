@@ -25,9 +25,11 @@ const {
 	type = 'website'
 } = Astro.props;
 
-const siteUrl = 'https://comolocal.es';
-const canonicalUrl = new URL(Astro.url.pathname, siteUrl).href;
-const ogImage = image ? image : `${siteUrl}${ogDefaultImage.src}`;
+// Canonical URL: Use Astro's configured site as base, enforce trailing slash to match config
+const siteBase = import.meta.env.SITE || Astro.url.origin;
+const path = Astro.url.pathname.endsWith('/') ? Astro.url.pathname : `${Astro.url.pathname}/`;
+const canonicalUrl = new URL(path, siteBase).href;
+const ogImage = image ? image : `${siteBase}${ogDefaultImage.src}`;
 ---
 
 <!doctype html>

@@ -12,6 +12,7 @@ import vercel from '@astrojs/vercel';
 export default defineConfig({
   site: 'https://comolocal.es',
   output: 'server',
+  trailingSlash: 'always',
   adapter: vercel(),
   vite: {
     plugins: [tailwindcss()]
