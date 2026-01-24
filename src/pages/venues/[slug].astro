@@ -1,0 +1,367 @@
+---
+import Layout from '@/layouts/Layout.astro';
+import Navbar from '@/components/layout/Navbar';
+import VenueJSONLD from '@/components/seo/VenueJSONLD.astro';
+import { Button } from '@/components/ui/Button';
+import { Badge } from '@/components/ui/Badge';
+import type { Venue } from '@/types/wordpress';
+import { getNoiseLevelLabel, getEntryFeeLabel, matchesEntryFee, ENTRY_FEES } from '@/lib/venue-mapping';
+
+// 1. GET THE SLUG
+const { slug } = Astro.params;
+
+if (!slug) {
+  return Astro.redirect('/404');
+}
+
+// 2. FETCH SINGLE ENTITY (SSR)
+const response = await fetch(import.meta.env.WORDPRESS_API_URL, {
+  method: 'POST',
+  headers: { 'Content-Type': 'application/json' },
+  body: JSON.stringify({
+    query: `
+      query GetVenue($slug: ID!) {
+        venue(id: $slug, idType: SLUG) {
+          slug
+          title
+          content
+          featuredImage {
+            node {
+              sourceUrl
+              altText
+            }
+          }
+          venueSchemaData {
+            cocktailPrice
+            currency
+            entryFeeStatus
+            noiseLevel
+            googlePlaceId
+            officialWebsite
+            studentDealDetail
+            mondayOpen
+            mondayClose
+            tuesdayOpen
+            tuesdayClose
+            wednesdayOpen
+            wednesdayClose
+            thursdayOpen
+            thursdayClose
+            fridayOpen
+            fridayClose
+            saturdayOpen
+            saturdayClose
+            sundayOpen
+            sundayClose
+          }
+          neighborhoods {
+            nodes {
+              name
+              slug
+            }
+          }
+          musicGenres {
+            nodes {
+              name
+              slug
+            }
+          }
+          vibeTags {
+            nodes {
+              name
+              slug
+            }
+          }
+        }
+      }
+    `,
+    variables: { slug }
+  }),
+});
+
+const { data } = await response.json();
+const venue = data?.venue;
+
+// 3. HANDLE 404
+if (!venue) {
+  return new Response(null, {
+    status: 404,
+    statusText: 'Not Found'
+  });
+}
+
+// Helper functions for display
+function capitalize(str: string) {
+    if (!str) return '';
+    return str.charAt(0).toUpperCase() + str.slice(1);
+}
+
+const schema = venue.venueSchemaData;
+const image = venue.featuredImage?.node?.sourceUrl;
+const alt = venue.featuredImage?.node?.altText || venue.title;
+
+// Hours formatting
+const days = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
+const hours = days.map(day => {
+    const lowerDay = day.toLowerCase();
+    const open = schema[`${lowerDay}Open`];
+    const close = schema[`${lowerDay}Close`];
+    return { day, open, close };
+});
+
+const currentDayIndex = new Date().getDay(); // 0 = Sunday
+const todayDayName = currentDayIndex === 0 ? 'Sunday' : days[currentDayIndex - 1];
+---
+
+<Layout title={`${venue.title} | Nightlife Guide`}>
+  <VenueJSONLD venue={venue} slot="head" />
+  <Navbar client:load />
+
+  {/* Hero Section */}
+  <div class="relative w-full h-[60vh] min-h-[500px] overflow-hidden bg-background">
+     {image ? (
+        <>
+            <div class="absolute inset-0">
+                <img 
+                    src={image} 
+                    alt={alt}
+                    class="w-full h-full object-cover"
+                />
+            </div>
+            {/* Gradient Overlay */}
+            <div class="absolute inset-0 bg-gradient-to-t from-background via-background/60 to-background/30" />
+            <div class="absolute inset-0 bg-gradient-to-r from-background/80 via-transparent to-background/20" />
+        </>
+     ) : (
+        <div class="absolute inset-0 bg-gradient-to-br from-primary/20 via-background to-accent/20" />
+     )}
+
+     {/* Hero Content */}
+     <div class="absolute inset-0 flex items-end">
+        <div class="container mx-auto px-4 pb-12 md:pb-20">
+            <div class="max-w-4xl">
+                
+                <h1 class="text-5xl md:text-7xl font-black tracking-tight text-white mb-4 drop-shadow-xl">
+                    {venue.title}
+                </h1>
+
+                {/* Quick Info Bar */}
+                <div class="flex flex-wrap gap-6 text-white/90 font-medium">
+
+                     
+                     <div class="flex items-center gap-2">
+                        <div class="p-1.5 rounded-full bg-white/10 backdrop-blur-sm">
+                            <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
+                            </svg>
+                        </div>
+                        <span>
+                            {venue.neighborhoods?.nodes && venue.neighborhoods.nodes.length > 0 
+                                ? `${venue.neighborhoods.nodes[0].name}, Madrid` 
+                                : 'Madrid, Spain'}
+                        </span>
+                     </div>
+                </div>
+            </div>
+        </div>
+     </div>
+  </div>
+
+  <main class="container mx-auto px-4 py-12">
+    <div class="grid grid-cols-1 lg:grid-cols-3 gap-12">
+        
+        {/* Left Column: Content */}
+        <div class="lg:col-span-2 space-y-12">
+            
+            {/* About Section */}
+            <section>
+                <div class="flex items-center gap-3 mb-6">
+                    <div class="h-8 w-1 bg-primary rounded-full"></div>
+                    <h2 class="text-2xl font-bold tracking-tight">About The Vibe</h2>
+                </div>
+                {/* Content with styling */}
+                <div class="prose prose-zinc dark:prose-invert prose-lg max-w-none leading-relaxed text-muted-foreground prose-a:text-primary prose-a:font-semibold prose-a:no-underline hover:prose-a:underline transition-colors">
+                    <div set:html={venue.content} />
+                </div>
+            </section>
+
+            {/* Features Grid */}
+            <section>
+                <div class="flex items-center gap-3 mb-6">
+                    <div class="h-8 w-1 bg-accent rounded-full"></div>
+                    <h2 class="text-2xl font-bold tracking-tight">What to Expect</h2>
+                </div>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                     <div class="p-4 rounded-xl bg-card border border-border/50 flex gap-4 items-start">
+                        <div class="p-2 rounded-lg bg-primary/10 text-primary">
+                             <svg class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9.813 15.904L9 18.75l-.813-2.846a4.5 4.5 0 00-3.09-3.09L2.25 12l2.846-.813a4.5 4.5 0 003.09-3.09L9 5.25l.813 2.846a4.5 4.5 0 003.09 3.09L15.75 12l-2.846.813a4.5 4.5 0 00-3.09 3.09zM18.259 8.715L18 9.75l-.259-1.035a3.375 3.375 0 00-2.455-2.456L14.25 6l1.036-.259a3.375 3.375 0 002.455-2.456L18 2.25l.259 1.035a3.375 3.375 0 002.456 2.456L21.75 6l-1.035.259a3.375 3.375 0 00-2.456 2.456zM16.894 20.567L16.5 21.75l-.394-1.183a2.25 2.25 0 00-1.423-1.423L13.5 18.75l1.183-.394a2.25 2.25 0 001.423-1.423l.394-1.183.394 1.183a2.25 2.25 0 001.423 1.423l1.183.394-1.183.394a2.25 2.25 0 00-1.423 1.423z" />
+                             </svg>
+                        </div>
+                        <div>
+                            <h3 class="font-semibold mb-1">Student Perks</h3>
+                            <p class="text-sm text-muted-foreground">{(!schema.studentDealDetail || schema.studentDealDetail.toLowerCase() === 'none') ? "No student perks" : schema.studentDealDetail}</p>
+                        </div>
+                     </div>
+                     <div class="p-4 rounded-xl bg-card border border-border/50 flex gap-4 items-start">
+                        <div class="p-2 rounded-lg bg-accent/10 text-accent">
+                             <svg class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M19.114 5.636a9 9 0 010 12.728M16.463 8.288a5.25 5.25 0 010 7.424M6.75 8.25l4.72-4.72a.75.75 0 011.28.53v15.88a.75.75 0 01-1.28.53l-4.72-4.72H4.51c-.88 0-1.704-.507-1.938-1.354A9.01 9.01 0 012.25 12c0-.83.112-1.633.322-2.396C2.806 8.756 3.63 8.25 4.51 8.25H6.75z" />
+                             </svg>
+                        </div>
+                        <div>
+                            <h3 class="font-semibold mb-1">Noise Level</h3>
+                            <p class="text-sm text-muted-foreground">{getNoiseLevelLabel(schema.noiseLevel?.[0])} - Expect music and atmosphere accordingly.</p>
+                        </div>
+                     </div>
+                     
+                     {venue.musicGenres?.nodes && venue.musicGenres.nodes.length > 0 && (
+                        <div class="p-4 rounded-xl bg-card border border-border/50 flex gap-4 items-start">
+                            <div class="p-2 rounded-lg bg-indigo-500/10 text-indigo-500">
+                                 <svg class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 19V6l12-3v13M9 19c0 1.105-1.343 2-3 2s-3-.895-3-2 1.343-2 3-2 3 .895 3 2zm12-3c0 1.105-1.343 2-3 2s-3-.895-3-2 1.343-2 3-2 3 .895 3 2zM9 10l12-3" />
+                                 </svg>
+                            </div>
+                            <div>
+                                <h3 class="font-semibold mb-1">Music</h3>
+                                <div class="flex flex-wrap gap-2">
+                                    {venue.musicGenres.nodes.map(genre => (
+                                        <Badge variant="outline" className="text-xs bg-background/50 h-6">
+                                            {genre.name}
+                                        </Badge>
+                                    ))}
+                                </div>
+                            </div>
+                         </div>
+                     )}
+
+                     {venue.vibeTags?.nodes && venue.vibeTags.nodes.length > 0 && (
+                        <div class="p-4 rounded-xl bg-card border border-border/50 flex gap-4 items-start">
+                            <div class="p-2 rounded-lg bg-pink-500/10 text-pink-500">
+                                 <svg class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A1.994 1.994 0 013 12V7a4 4 0 014-4z" />
+                                 </svg>
+                            </div>
+                            <div>
+                                <h3 class="font-semibold mb-1">Vibe</h3>
+                                <div class="flex flex-wrap gap-2">
+                                    {venue.vibeTags.nodes.map(vibe => (
+                                        <Badge variant="secondary" className="text-xs h-6">
+                                            {vibe.name}
+                                        </Badge>
+                                    ))}
+                                </div>
+                            </div>
+                         </div>
+                     )}
+                </div>
+            </section>
+        </div>
+
+        {/* Right Column: Sticky Sidebar */}
+        <div class="lg:col-span-1 space-y-6">
+            
+            {/* Quick Details Card */}
+            <div class="p-6 rounded-2xl bg-card border border-border shadow-lg space-y-6 sticky top-24">
+                
+                {schema.studentDealDetail && (
+                    <div class="p-4 rounded-xl bg-gradient-to-r from-primary/20 to-accent/20 border border-primary/20">
+                        <div class="flex items-center gap-2 text-primary font-bold mb-1">
+                            <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 3v4M3 5h4M6 17v4m-2-2h4m5-16l2.286 6.857L21 12l-5.714 2.143L13 21l-2.286-6.857L5 12l5.714-2.143L13 3z" />
+                            </svg>
+                            Star Deal
+                        </div>
+                        <p class="text-sm text-foreground/90 font-medium">{schema.studentDealDetail}</p>
+                    </div>
+                )}
+
+                <div>
+                    <h3 class="font-semibold mb-4 text-lg">Opening Hours</h3>
+                    <div class="space-y-3">
+                        {hours.map(({ day, open, close }) => {
+                             const isToday = day === todayDayName;
+                             return (
+                                <div class={`flex justify-between text-sm ${isToday ? 'font-bold text-foreground' : 'text-muted-foreground'}`}>
+                                    <span>{day}</span>
+                                    <span>{open ? `${open} - ${close}` : 'Closed'}</span>
+                                </div>
+                             )
+                        })}
+                    </div>
+                </div>
+
+                <div class="space-y-3 pt-4 border-t border-border/50">
+                    <div class="flex justify-between items-center text-sm">
+                        <span class="text-muted-foreground flex items-center gap-2">
+                             <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M16.5 6v.75m0 3v.75m0 3v.75m0 3V18m-9-5.25h5.25M7.5 15h3M3.375 5.25c-.621 0-1.125.504-1.125 1.125v3.026a2.999 2.999 0 010 5.198v3.026c0 .621.504 1.125 1.125 1.125h17.25c.621 0 1.125-.504 1.125-1.125v-3.026a2.999 2.999 0 010-5.198V6.375c0-.621-.504-1.125-1.125-1.125H3.375z" />
+                            </svg>
+                            Entry Fee
+                        </span>
+                        
+                        {(() => {
+                            const label = getEntryFeeLabel(schema.entryFeeStatus?.[0]);
+                            const isFree = matchesEntryFee(schema.entryFeeStatus?.[0], ENTRY_FEES.FREE.id);
+                            
+                            if (isFree) {
+                                return <span class="font-bold text-green-500">{label}</span>;
+                            }
+                            return <span class="font-medium capitalize">{label}</span>;
+                        })()}
+                    </div>
+                    <div class="flex justify-between items-center text-sm">
+                        <span class="text-muted-foreground flex items-center gap-2">
+                             <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9.75 3.104v5.714a2.25 2.25 0 01-.659 1.591L5 14.5M9.75 3.104c-.251.023-.501.05-.75.082m.75-.082a24.301 24.301 0 014.5 0m0 0v5.714c0 .597.237 1.17.659 1.591L19.8 15.3M14.25 3.104c.251.023.501.05.75.082M19.8 15.3l-1.57.393A9.065 9.065 0 0112 15a9.065 9.065 0 00-6.23.693L5 14.5m14.8.8l1.402 1.402c1.232 1.232.65 3.318-1.067 3.611l-.628.105a9.128 9.128 0 01-4.264-.192M5 14.5l-1.402 1.402c-1.232 1.232-.65 3.318 1.067 3.611l.628.105a9.128 9.128 0 004.264-.192" />
+                            </svg>
+                            Cocktail Price
+                        </span>
+                        <span class="font-medium">Approx. €{schema.cocktailPrice || '?'}</span>
+                    </div>
+                </div>
+                
+                {schema.officialWebsite && (
+                    <a href={schema.officialWebsite} target="_blank" rel="noopener noreferrer" class="block">
+                        <Button className="w-full gap-2 group">
+                            Visit Website
+                            <svg class="w-4 h-4 transition-transform group-hover:translate-x-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
+                            </svg>
+                        </Button>
+                    </a>
+                )}
+                
+                {schema.googlePlaceId && (
+                     <a href={`https://www.google.com/maps/place/?q=place_id:${schema.googlePlaceId}`} target="_blank" rel="noopener noreferrer" class="block">
+                        <Button variant="outline" className="w-full gap-2">
+                            Get Directions
+                            <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
+                            </svg>
+                        </Button>
+                    </a>
+                )}
+
+            </div>
+        </div>
+
+    </div>
+  </main>
+</Layout>
+
+<style is:global>
+  /* Force link styling in the venue content area */
+  .prose a {
+    color: hsl(var(--primary));
+    font-weight: 600;
+    text-decoration: none;
+    transition: color 0.2s ease;
+  }
+  .prose a:hover {
+    text-decoration: underline;
+    text-underline-offset: 4px;
+  }
+</style>

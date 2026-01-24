@@ -1,0 +1,32 @@
+---
+import Layout from '@/layouts/Layout.astro';
+import Navbar from '@/components/layout/Navbar';
+import PageHeader from '@/components/layout/PageHeader';
+import VenueGridWithFilters from '@/components/venues/VenueGridWithFilters';
+import { getAllVenues } from '@/lib/api/wordpress';
+
+const venues = await getAllVenues();
+---
+
+<Layout title="Venues | Comolocal">
+  <Navbar client:load />
+  <PageHeader 
+    client:load
+    variant="venues"
+    title="Discover Nightlife"
+    subtitle="Curated selection of the best bars, clubs, and pubs in Madrid. Verified student deals and local vibes."
+  />
+
+  <!-- Negative margin pulls content up into header's atmosphere -->
+  <main class="container mx-auto px-4 -mt-6 relative z-10 pb-12">
+    {venues.length === 0 ? (
+      <div class="text-center p-12 bg-muted/20 rounded-xl border border-dashed border-border">
+        <p class="text-lg text-muted-foreground">No venues found or connection to WordPress failed.</p>
+        <p class="text-sm mt-2 text-muted-foreground">Check your .env config and WordPress status.</p>
+      </div>
+    ) : (
+      <VenueGridWithFilters client:load venues={venues} />
+    )}
+  </main>
+</Layout>
+

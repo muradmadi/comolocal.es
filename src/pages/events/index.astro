@@ -1,0 +1,122 @@
+---
+import Layout from '@/layouts/Layout.astro';
+import Navbar from '@/components/layout/Navbar';
+import PageHeader from '@/components/layout/PageHeader';
+import EventTicket from '@/components/cards/EventTicket.astro';
+import EventCalendar from '@/components/events/EventCalendar';
+import { getAllEvents } from '@/lib/api/wordpress';
+import type { Event } from '@/types/wordpress';
+
+const events = await getAllEvents();
+
+
+
+// Filter future events and sort by date
+const now = new Date();
+const upcomingEvents = events
+  .filter((event: Event) => {
+    if (!event.eventData?.eventStart) {
+
+      return false; // Don't show events without dates
+    }
+    return new Date(event.eventData.eventStart) >= now;
+  })
+  .sort((a: Event, b: Event) => {
+    const dateA = a.eventData?.eventStart ? new Date(a.eventData.eventStart).getTime() : 0;
+    const dateB = b.eventData?.eventStart ? new Date(b.eventData.eventStart).getTime() : 0;
+    return dateA - dateB;
+  });
+
+// Only show upcoming events
+const displayEvents = upcomingEvents;
+
+// Check if there are any events happening today (for live indicator)
+const hasLiveEvents = displayEvents.some((event: Event) => {
+  if (!event.eventData?.eventStart) return false;
+  const eventDate = new Date(event.eventData.eventStart);
+  return eventDate.toDateString() === now.toDateString();
+});
+---
+
+<Layout title="Upcoming Events | Comolocal">
+  <Navbar client:load />
+  <PageHeader 
+    client:load
+    variant="events"
+    title="Upcoming Events"
+    subtitle="Don't miss the party. The best student nights and special events happening in Madrid."
+    showLiveIndicator={hasLiveEvents}
+  />
+
+  <main class="container mx-auto px-4 py-12">
+
+
+    {displayEvents.length === 0 ? (
+      <div class="text-center p-12 bg-muted/20 rounded-xl border border-dashed border-border">
+        <p class="text-lg text-muted-foreground">No upcoming events scheduled at the moment.</p>
+        <p class="text-sm mt-2 text-muted-foreground">Check back later for new drops.</p>
+      </div>
+    ) : (
+      <div>
+      <div class="flex flex-col gap-6 max-w-5xl mx-auto mb-16" id="events-container">
+        {displayEvents.map((event: Event, index: number) => (
+            <div class={`event-item transition-all duration-500 ${index >= 5 ? 'hidden' : ''}`} data-index={index}>
+                <EventTicket event={event} />
+            </div>
+        ))}
+      </div>
+
+      {displayEvents.length > 5 && (
+          <div class="text-center mb-24">
+              <button 
+                  id="show-more-btn"
+                  class="px-8 py-3 rounded-full bg-secondary text-secondary-foreground font-medium hover:bg-secondary/80 transition-colors"
+              >
+                  Show More Events
+              </button>
+          </div>
+      )}
+
+      {/* Calendar Section */}
+      <div class="max-w-7xl mx-auto py-12 border-t border-border/40">
+           <div class="mb-10 text-center">
+               <h2 class="text-3xl font-bold mb-4">Event Calendar</h2>
+               <p class="text-muted-foreground max-w-2xl mx-auto">
+                   View all upcoming parties and events by date. Plan your month ahead.
+               </p>
+           </div>
+           <EventCalendar client:visible events={displayEvents} />
+      </div>
+
+      <script is:inline>
+          const showMoreBtn = document.getElementById('show-more-btn');
+          const hiddenEvents = document.querySelectorAll('.event-item.hidden');
+          const PAGE_SIZE = 5;
+          
+          if (showMoreBtn) {
+              showMoreBtn.addEventListener('click', () => {
+                  const currentlyHidden = document.querySelectorAll('.event-item.hidden');
+                  
+                  // Reveal next batch
+                  for (let i = 0; i < PAGE_SIZE && i < currentlyHidden.length; i++) {
+                      currentlyHidden[i].classList.remove('hidden');
+                      // Add fade-in effect
+                      currentlyHidden[i].style.opacity = '0';
+                      currentlyHidden[i].style.transform = 'translateY(20px)';
+                      setTimeout(() => {
+                            currentlyHidden[i].style.opacity = '1';
+                            currentlyHidden[i].style.transform = 'translateY(0)';
+                      }, 50 * i);
+                  }
+                  
+                  // Check if we need to hide the button
+                  if (document.querySelectorAll('.event-item.hidden').length === 0) {
+                      showMoreBtn.style.display = 'none';
+                  }
+              });
+          }
+      </script>
+      </div>
+    )}
+  </main>
+</Layout>

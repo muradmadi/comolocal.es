@@ -1,0 +1,43 @@
+---
+import type { Event } from '@/types/wordpress';
+
+interface Props {
+  event: Event;
+  siteUrl?: string;
+}
+
+const { event, siteUrl = 'https://comolocal.es' } = Astro.props;
+const data = event.eventData;
+
+// Get venue info if available
+const venue = data?.relatedVenue?.nodes?.[0];
+
+const schema = {
+  "@context": "https://schema.org",
+  "@type": "Event",
+  "name": event.title,
+  "description": event.content?.replace(/<[^>]*>/g, '').substring(0, 200) || '',
+  "url": `${siteUrl}/events/${event.slug}`,
+  "startDate": data.eventStart,
+  "endDate": data.eventEnd,
+  "eventStatus": "https://schema.org/EventScheduled",
+  "eventAttendanceMode": "https://schema.org/OfflineEventAttendanceMode",
+  ...(event.featuredImage?.node?.sourceUrl && {
+    "image": event.featuredImage.node.sourceUrl
+  }),
+  ...(venue && {
+    "location": {
+      "@type": "Place",
+      "name": venue.title,
+      "url": `${siteUrl}/venues/${venue.slug}`
+    }
+  }),
+  "organizer": {
+    "@type": "Organization",
+    "name": "Comolocal",
+    "url": siteUrl
+  }
+};
+---
+
+<script type="application/ld+json" set:html={JSON.stringify(schema)} />

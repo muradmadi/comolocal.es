@@ -1,0 +1,43 @@
+---
+import type { Venue } from '@/types/wordpress';
+import { mapOpeningHours } from '@/lib/seo/schema-helpers';
+
+interface Props {
+  venue: Venue;
+}
+
+const { venue } = Astro.props;
+const data = venue.venueSchemaData;
+
+// Handle the Lists (e.g. currency might be ["EUR"])
+const currency = data.currency?.[0] || 'EUR';
+const noise = data.noiseLevel?.[0] || 'Unknown';
+const deal = data.studentDealDetail || 'None';
+
+const schema = {
+  "@context": "https://schema.org",
+  "@type": "BarOrPub",
+  "name": venue.title,
+  "url": `https://comolocal.com/venues/${venue.slug}`,
+  "priceRange": `€${data.cocktailPrice || '0'}`,
+  "openingHoursSpecification": mapOpeningHours(data),
+  "amenityFeature": [
+    {
+      "@type": "LocationFeatureSpecification",
+      "name": "Noise Level",
+      "value": noise
+    },
+    {
+      "@type": "LocationFeatureSpecification",
+      "name": "Student Deal",
+      "value": deal
+    }
+  ]
+};
+
+if (data.officialWebsite) {
+  schema["sameAs"] = [data.officialWebsite];
+}
+---
+
+<script type="application/ld+json" set:html={JSON.stringify(schema)} />

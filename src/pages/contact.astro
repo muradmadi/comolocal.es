@@ -1,0 +1,66 @@
+---
+import Layout from '../layouts/Layout.astro';
+import Navbar from '../components/layout/Navbar';
+import PageHeader from '../components/layout/PageHeader';
+import ContactForm from '../components/ui/ContactForm';
+import { MapPin } from 'lucide-react';
+---
+
+<Layout title="Contact Us | Comolocal">
+  <Navbar client:load />
+  
+  <main class="flex-1">
+    <PageHeader 
+      variant="contact"
+      title="Get in Touch"
+      subtitle="Have a question about Madrid's nightlife? Want to collaborate? Or just want to say hola? We'd love to hear from you."
+    />
+
+    <section class="pb-24 pt-12">
+      <div class="container mx-auto px-4 max-w-6xl">
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-24">
+          
+          {/* Contact Info */}
+          <div class="space-y-12">
+            <div>
+              <h2 class="text-2xl font-bold mb-6 flex items-center gap-2">
+                <span class="w-8 h-1 bg-primary rounded-full"></span>
+                Let's Chat
+              </h2>
+              <p class="text-muted-foreground text-lg leading-relaxed">
+                We're always looking for new hidden gems, party partners, and feedback. 
+                Don't be shy, drop us a line and we'll get back to you as soon as the fiesta is over.
+              </p>
+            </div>
+
+            <div class="space-y-6">
+
+
+              <div class="flex items-start gap-4 p-4 rounded-xl bg-card/50 border border-border/50 hover:bg-card hover:border-primary/50 transition-colors group">
+                <div class="p-3 rounded-lg bg-primary/10 text-primary group-hover:bg-primary group-hover:text-primary-foreground transition-colors">
+                  <MapPin className="w-6 h-6" />
+                </div>
+                <div>
+                  <h3 class="font-semibold text-foreground">Based in</h3>
+                  <p class="text-muted-foreground">
+                    Madrid, Spain 🇪🇸
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {/* Contact Form */}
+          <div class="relative">
+            {/* Form Glow Effect */}
+            <div class="absolute -inset-1 bg-gradient-to-r from-primary to-purple-600 rounded-2xl blur opacity-20 pointer-events-none"></div>
+            
+            <div class="relative bg-card border border-border rounded-2xl p-8 shadow-xl">
+              <ContactForm client:visible />
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+</Layout>

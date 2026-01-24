@@ -1,0 +1,15 @@
+# ComoLocal Robots.txt
+# https://comolocal.es
+
+User-agent: *
+Allow: /
+
+# Sitemap location
+Sitemap: https://comolocal.es/sitemap.xml
+
+# Disallow admin and API routes (if any)
+Disallow: /api/
+
+
+# Crawl delay (optional, be gentle on server)
+Crawl-delay: 1

@@ -1,0 +1,146 @@
+---
+import Layout from '../layouts/Layout.astro';
+import Navbar from '../components/layout/Navbar';
+import ContactForm from '../components/ui/ContactForm';
+import AboutBento from '../components/ui/AboutBento.astro';
+import SearchIntentAccordion from '../components/ui/SearchIntentAccordion';
+---
+
+<Layout title="Comolocal | The Ultimate Student Nightlife Guide">
+	<Navbar client:load />
+
+	<main class="relative w-full overflow-hidden bg-background">
+		<!-- Hero Section -->
+		<section class="relative min-h-screen flex items-center justify-center pt-16">
+			
+			<!-- Background Effects -->
+			<div class="absolute inset-0 z-0 overflow-hidden bg-background">
+				<!-- Base Grid -->
+				<div class="absolute inset-0 bg-[linear-gradient(to_right,#80808012_1px,transparent_1px),linear-gradient(to_bottom,#80808012_1px,transparent_1px)] bg-[size:40px_40px] [mask-image:radial-gradient(ellipse_60%_50%_at_50%_0%,#000_70%,transparent_100%)]"></div>
+				
+				<!-- Large Geometric Wireframes -->
+				<div class="absolute top-[-20%] left-[-10%] w-[800px] h-[800px] opacity-10 animate-[spin_60s_linear_infinite]">
+					<div class="w-full h-full border border-primary/30 rounded-full dashed-border"></div>
+				</div>
+				
+				<div class="absolute top-[20%] right-[-20%] w-[600px] h-[600px] opacity-10 animate-[spin_45s_linear_infinite_reverse]">
+					<div class="w-full h-full border border-accent/40 rotate-45 transform"></div>
+				</div>
+
+				<div class="absolute bottom-[-10%] left-[20%] w-[400px] h-[400px] opacity-[0.05] animate-[spin_30s_linear_infinite]">
+					<div class="w-full h-full border-[2px] border-foreground/30"></div>
+				</div>
+
+				<!-- Floating Particles -->
+				<div class="absolute top-1/4 left-1/4 w-4 h-4 bg-primary/20 rounded-full blur-[1px] animate-float"></div>
+				<div class="absolute top-3/4 right-1/3 w-6 h-6 border border-accent/20 rotate-12 animate-float delay-1000"></div>
+				
+				<!-- Cinematic Gradient Overlay -->
+				<div class="absolute inset-0 bg-gradient-to-b from-background via-background/40 to-background pointer-events-none"></div>
+				<div class="absolute inset-0 bg-gradient-to-r from-background/60 via-transparent to-background/60 pointer-events-none"></div>
+			</div>
+
+			<!-- Main Content -->
+			<div class="relative z-10 container mx-auto px-4 text-center flex flex-col items-center">
+				
+				<!-- Animated Pill Tag -->
+				<div class="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-border/30 backdrop-blur-md border border-white/10 mb-8 animate-in fade-in slide-in-from-bottom-4 duration-700">
+					<span class="flex items-center gap-1">
+						<span class="w-1 h-3 bg-accent rounded-full animate-equalizer"></span>
+						<span class="w-1 h-2 bg-primary rounded-full animate-equalizer delay-75"></span>
+						<span class="w-1 h-4 bg-purple-400 rounded-full animate-equalizer delay-150"></span>
+					</span>
+					<span class="text-sm font-medium text-foreground/80 tracking-wide uppercase">Your Night Starts Here</span>
+				</div>
+
+				<!-- Main Headline -->
+				<h1 class="text-5xl md:text-7xl lg:text-8xl font-black tracking-tight leading-[1.1] mb-6 animate-in fade-in slide-in-from-bottom-8 duration-800 delay-100">
+					The Ultimate <br class="hidden md:block" />
+					<span class="text-transparent bg-clip-text bg-gradient-to-r from-primary via-purple-400 to-accent animate-text-shimmer bg-[length:200%_auto]">
+						Student Nightlife
+					</span>
+					<br />Guide
+				</h1>
+
+				<!-- Subtitle with Keywords -->
+				<p class="text-lg md:text-2xl text-muted-foreground max-w-3xl mb-12 leading-relaxed animate-in fade-in slide-in-from-bottom-8 duration-800 delay-200">
+					Discover the city's hidden gems. From underground
+					<span class="text-foreground font-semibold">clubs</span> and secret 
+					<span class="text-foreground font-semibold">bars</span> to the best 
+					<span class="text-foreground font-semibold">student parties</span>. 
+					We curate the vibe so you can live the night.
+				</p>
+
+				<!-- CTA Buttons -->
+				<div class="flex flex-col sm:flex-row gap-4 w-full justify-center items-center animate-in fade-in slide-in-from-bottom-8 duration-800 delay-300">
+					<a href="/venues" class="group relative px-8 py-4 bg-primary text-primary-foreground font-bold rounded-full overflow-hidden transition-all hover:scale-105 hover:shadow-[0_0_40px_rgba(124,58,237,0.5)]">
+						<div class="absolute inset-0 bg-gradient-to-r from-violet-600 to-indigo-600 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+						<span class="relative flex items-center gap-2">
+							Find a Venue
+							<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-5 h-5 transition-transform group-hover:translate-x-1"><path d="m9 18 6-6-6-6"/></svg>
+						</span>
+					</a>
+					
+					<a href="/blog" class="group px-8 py-4 bg-card border border-border/50 text-foreground font-bold rounded-full transition-all hover:border-primary/50 hover:bg-card/80">
+						<span class="flex items-center gap-2">
+							Explore the Guides
+						</span>
+					</a>
+				</div>
+
+				<!-- Stats / Social Proof (Optional Visual Anchor) -->
+
+
+			</div>
+		</section>
+	</main>
+	</main>
+<AboutBento />
+
+		<!-- Navigation Cards Section -->
+		<SearchIntentAccordion client:visible />
+		<!-- Contact Section -->
+		<section class="py-24 bg-background relative border-t border-white/5">
+			<div class="container mx-auto px-4 max-w-6xl">
+				<div class="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-24 items-center">
+					
+					{/* Contact Info Side */}
+					<div class="space-y-8 text-left">
+						<div>
+							<h2 class="text-3xl md:text-5xl font-bold tracking-tight mb-6 flex items-center gap-3">
+								<span class="w-12 h-1 bg-primary rounded-full"></span>
+								Have a Suggestion?
+							</h2>
+							<p class="text-muted-foreground text-lg leading-relaxed">
+								We're continually scouting for the next big thing in Madrid's nightlife. 
+								Know a hidden speakeasy, a student dive bar, or an underground club we missed? 
+								<br/><br/>
+								Want to partner up or just say hola? Drop us a line.
+							</p>
+						</div>
+
+						<div class="flex items-center gap-4 p-4 rounded-xl bg-card/30 border border-border/50">
+							<div class="p-3 rounded-lg bg-primary/10 text-primary">
+								<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+							</div>
+							<div>
+								<h3 class="font-semibold text-foreground">We Listen</h3>
+								<p class="text-sm text-muted-foreground">We read every message from our community.</p>
+							</div>
+						</div>
+					</div>
+
+					{/* Form Side */}
+					<div class="relative">
+						{/* Form Glow Effect */}
+						<div class="absolute -inset-1 bg-gradient-to-r from-primary to-purple-600 rounded-2xl blur opacity-20 pointer-events-none"></div>
+						
+						<div class="relative bg-card border border-border rounded-2xl p-8 shadow-xl">
+							<ContactForm client:visible />
+						</div>
+					</div>
+				</div>
+			</div>
+		</section>
+	</main>
+</Layout>

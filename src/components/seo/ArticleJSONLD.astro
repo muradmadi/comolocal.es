@@ -1,0 +1,45 @@
+---
+import type { Post } from '@/types/wordpress';
+
+interface Props {
+  post: Post;
+  siteUrl?: string;
+}
+
+const { post, siteUrl = 'https://comolocal.es' } = Astro.props;
+
+// Format date for Schema.org
+const datePublished = new Date(post.date).toISOString();
+
+const schema = {
+  "@context": "https://schema.org",
+  "@type": "Article",
+  "headline": post.title,
+  "url": `${siteUrl}/blog/${post.slug}`,
+  "datePublished": datePublished,
+  "dateModified": datePublished, // Use same date if no modified date available
+  ...(post.featuredImage?.node?.sourceUrl && {
+    "image": post.featuredImage.node.sourceUrl
+  }),
+  "author": {
+    "@type": "Organization",
+    "name": "Comolocal",
+    "url": siteUrl
+  },
+  "publisher": {
+    "@type": "Organization",
+    "name": "Comolocal",
+    "url": siteUrl,
+    "logo": {
+      "@type": "ImageObject",
+      "url": `${siteUrl}/logo.png`
+    }
+  },
+  "mainEntityOfPage": {
+    "@type": "WebPage",
+    "@id": `${siteUrl}/blog/${post.slug}`
+  }
+};
+---
+
+<script type="application/ld+json" set:html={JSON.stringify(schema)} />

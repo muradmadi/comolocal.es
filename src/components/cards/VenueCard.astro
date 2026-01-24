@@ -1,0 +1,75 @@
+---
+import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/components/ui/Card";
+import { Badge } from "@/components/ui/Badge";
+import { Button } from "@/components/ui/Button";
+import type { Venue } from "@/types/wordpress";
+
+interface Props {
+  venue: Venue;
+}
+
+const { venue } = Astro.props;
+
+// Safe data access
+const image = venue.featuredImage?.node?.sourceUrl;
+const alt = venue.featuredImage?.node?.altText || venue.title;
+const price = venue.venueSchemaData?.cocktailPrice;
+const currency = '€';
+const noise = venue.venueSchemaData?.noiseLevel?.[0];
+const status = venue.venueSchemaData?.entryFeeStatus?.[0];
+---
+
+<Card className="flex flex-col h-full hover:border-primary/50 transition-colors duration-300 group overflow-hidden">
+  <div class="h-48 overflow-hidden relative bg-muted">
+    {image ? (
+        <img 
+            src={image} 
+            alt={alt} 
+            class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+        />
+    ) : (
+        <div class="flex items-center justify-center h-full text-muted-foreground">
+            No Image
+        </div>
+    )}
+    
+    {status && (
+        <div class="absolute top-2 right-2">
+            <Badge className="bg-background/80 backdrop-blur text-foreground border-0 shadow-sm">
+                {status}
+            </Badge>
+        </div>
+    )}
+  </div>
+  
+  <CardHeader>
+    <div class="flex justify-between items-start gap-2">
+        <CardTitle className="text-xl leading-tight group-hover:text-primary transition-colors">
+            {venue.title}
+        </CardTitle>
+        {price && (
+             <span class="text-sm font-semibold text-muted-foreground whitespace-nowrap">
+                {currency}{price}
+             </span>
+        )}
+    </div>
+  </CardHeader>
+  
+  <CardContent class="flex-1">
+     <div class="flex gap-2 mb-4">
+        {noise && (
+            <Badge variant="secondary" className="text-xs capitalize">
+                {noise}
+            </Badge>
+        )}
+     </div>
+  </CardContent>
+
+  <CardFooter>
+    <a href={`/venues/${venue.slug}`} class="w-full">
+      <Button className="w-full group-hover:bg-primary group-hover:text-primary-foreground transition-colors">
+          View Details
+      </Button>
+    </a>
+  </CardFooter>
+</Card>

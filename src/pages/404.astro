@@ -1,0 +1,74 @@
+---
+import Layout from '../layouts/Layout.astro';
+import Navbar from '../components/layout/Navbar';
+import { Home, ArrowLeft, MapPin } from 'lucide-react';
+---
+
+<Layout title="Page Not Found | ComoLocal">
+    <Navbar client:load />
+    
+    <main class="flex-1 flex items-center justify-center min-h-[calc(100vh-200px)] bg-background relative overflow-hidden">
+        
+        <!-- Background Effects -->
+        <div class="absolute inset-0 pointer-events-none">
+            <div class="absolute top-1/4 left-1/4 w-96 h-96 bg-primary/10 rounded-full blur-[120px]"></div>
+            <div class="absolute bottom-1/4 right-1/4 w-96 h-96 bg-purple-500/10 rounded-full blur-[120px]"></div>
+        </div>
+        
+        <div class="container mx-auto px-4 text-center relative z-10">
+            
+            <!-- 404 Display -->
+            <div class="mb-8">
+                <h1 class="text-[12rem] md:text-[16rem] font-black leading-none text-transparent bg-clip-text bg-gradient-to-b from-foreground/20 to-foreground/5 select-none">
+                    404
+                </h1>
+            </div>
+            
+            <!-- Content -->
+            <div class="max-w-lg mx-auto -mt-16 relative">
+                <div class="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-primary/10 text-primary text-sm font-medium border border-primary/20 mb-6">
+                    <MapPin className="w-4 h-4" />
+                    Lost in Madrid?
+                </div>
+                
+                <h2 class="text-3xl md:text-4xl font-bold mb-4">
+                    This page doesn't exist
+                </h2>
+                
+                <p class="text-muted-foreground text-lg mb-10 leading-relaxed">
+                    Looks like you've wandered off the beaten path. Don't worry, even the best locals get lost sometimes. Let's get you back to the fiesta.
+                </p>
+                
+                <!-- Action Buttons -->
+                <div class="flex flex-col sm:flex-row items-center justify-center gap-4">
+                    <a 
+                        href="/" 
+                        class="inline-flex items-center gap-2 px-6 py-3 rounded-full bg-primary text-primary-foreground font-semibold hover:bg-primary/90 transition-colors shadow-lg shadow-primary/25"
+                    >
+                        <Home className="w-5 h-5" />
+                        Back to Home
+                    </a>
+                    
+                    <button 
+                        onclick="history.back()"
+                        class="inline-flex items-center gap-2 px-6 py-3 rounded-full bg-secondary text-secondary-foreground font-semibold hover:bg-secondary/80 transition-colors"
+                    >
+                        <ArrowLeft className="w-5 h-5" />
+                        Go Back
+                    </button>
+                </div>
+
+                <!-- Quick Links -->
+                <div class="mt-16 pt-8 border-t border-border/30">
+                    <p class="text-sm text-muted-foreground mb-4">Or explore these popular sections:</p>
+                    <div class="flex flex-wrap justify-center gap-3">
+                        <a href="/venues" class="text-sm text-foreground hover:text-primary transition-colors px-3 py-1.5 rounded-lg bg-card border border-border/50 hover:border-primary/50">Venues</a>
+                        <a href="/events" class="text-sm text-foreground hover:text-primary transition-colors px-3 py-1.5 rounded-lg bg-card border border-border/50 hover:border-primary/50">Events</a>
+                        <a href="/blog" class="text-sm text-foreground hover:text-primary transition-colors px-3 py-1.5 rounded-lg bg-card border border-border/50 hover:border-primary/50">Blog</a>
+                        <a href="/map" class="text-sm text-foreground hover:text-primary transition-colors px-3 py-1.5 rounded-lg bg-card border border-border/50 hover:border-primary/50">Map</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+</Layout>

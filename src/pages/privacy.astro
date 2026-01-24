@@ -1,0 +1,320 @@
+---
+import Layout from '../layouts/Layout.astro';
+import Navbar from '../components/layout/Navbar';
+import PageHeader from '../components/layout/PageHeader';
+import { User, Database, Settings, Share2, UserCheck, Cookie, Lock, Mail } from 'lucide-react';
+---
+
+<Layout title="Privacy Policy | ComoLocal">
+  <Navbar client:load />
+  
+  <main class="flex-1">
+    <PageHeader 
+      title="Privacy Policy" 
+      subtitle="Last updated: January 2026"
+    />
+
+    <div class="container mx-auto px-4 max-w-4xl py-12 md:py-20">
+      
+      <!-- Intro Card -->
+      <div class="bg-card/50 border border-border/50 rounded-2xl p-6 md:p-8 mb-12 backdrop-blur-sm">
+        <p class="text-muted-foreground text-lg leading-relaxed">
+          Your privacy matters to us. This policy explains what data we collect, how we use it, and your rights under European data protection law (GDPR).
+        </p>
+      </div>
+
+      <div class="space-y-12">
+
+        <!-- Section 1 -->
+        <section class="group">
+          <div class="flex items-start gap-4 mb-4">
+            <div class="p-3 rounded-xl bg-primary/10 text-primary shrink-0 group-hover:bg-primary group-hover:text-primary-foreground transition-colors">
+              <User className="w-6 h-6" />
+            </div>
+            <div>
+              <h2 class="text-2xl font-bold text-foreground">1. Data Controller</h2>
+              <span class="text-sm text-primary font-medium">Who We Are</span>
+            </div>
+          </div>
+          <div class="pl-0 md:pl-[72px]">
+            <p class="text-muted-foreground leading-relaxed mb-4">
+              The entity responsible for the processing of your data is <strong class="text-foreground">ComoLocal</strong>.
+            </p>
+            <div class="grid gap-3 sm:grid-cols-3">
+              <div class="bg-card border border-border/50 rounded-xl p-4">
+                <span class="text-xs text-muted-foreground uppercase tracking-wider">Location</span>
+                <p class="text-foreground font-medium mt-1">Madrid, Spain</p>
+              </div>
+              <div class="bg-card border border-border/50 rounded-xl p-4">
+                <span class="text-xs text-muted-foreground uppercase tracking-wider">Contact</span>
+                <p class="text-foreground font-medium mt-1">muradmadi@gmail.com</p>
+              </div>
+              <div class="bg-card border border-border/50 rounded-xl p-4">
+                <span class="text-xs text-muted-foreground uppercase tracking-wider">Domain</span>
+                <p class="text-foreground font-medium mt-1">comolocal.es</p>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- Section 2 -->
+        <section class="group">
+          <div class="flex items-start gap-4 mb-4">
+            <div class="p-3 rounded-xl bg-primary/10 text-primary shrink-0 group-hover:bg-primary group-hover:text-primary-foreground transition-colors">
+              <Database className="w-6 h-6" />
+            </div>
+            <div>
+              <h2 class="text-2xl font-bold text-foreground">2. Data We Collect</h2>
+              <span class="text-sm text-muted-foreground">Minimal by design</span>
+            </div>
+          </div>
+          <div class="pl-0 md:pl-[72px] space-y-6">
+            <p class="text-muted-foreground leading-relaxed">
+              We limit data collection to the absolute minimum required to operate a functional informational website.
+            </p>
+
+            <!-- 2A -->
+            <div class="bg-card border border-border/50 rounded-xl p-5 md:p-6">
+              <h4 class="font-semibold text-foreground mb-3 flex items-center gap-2">
+                <Mail className="w-4 h-4 text-primary" />
+                A. Information You Provide Voluntarily
+              </h4>
+              <div class="space-y-4 text-muted-foreground">
+                <p>
+                  <strong class="text-foreground">Contact Forms:</strong> If you write to us via a contact form or email link, we collect your email address and the content of your message.
+                </p>
+                <div class="grid gap-3 sm:grid-cols-2 text-sm">
+                  <div class="bg-muted/30 rounded-lg p-3">
+                    <span class="text-xs text-muted-foreground uppercase tracking-wider">Legal Basis</span>
+                    <p class="text-foreground mt-1">Legitimate Interest (responding to your inquiry)</p>
+                  </div>
+                  <div class="bg-muted/30 rounded-lg p-3">
+                    <span class="text-xs text-muted-foreground uppercase tracking-wider">Retention</span>
+                    <p class="text-foreground mt-1">Only as long as necessary to resolve your query</p>
+                  </div>
+                </div>
+                <p class="text-sm">
+                  We do not add you to marketing newsletters unless you explicitly opt-in via a separate checkbox.
+                </p>
+              </div>
+            </div>
+
+            <!-- 2B -->
+            <div class="bg-card border border-border/50 rounded-xl p-5 md:p-6">
+              <h4 class="font-semibold text-foreground mb-3 flex items-center gap-2">
+                <Cookie className="w-4 h-4 text-primary" />
+                B. Information Collected Automatically
+              </h4>
+              <div class="space-y-4 text-muted-foreground">
+                <p>
+                  <strong class="text-foreground">Google Analytics:</strong> We use Google Analytics to understand how visitors interact with our site (e.g., which blog posts are most popular, user location by country, session duration).
+                </p>
+                <div class="bg-muted/30 rounded-lg p-4">
+                  <p class="text-sm mb-2"><strong class="text-foreground">Data Collected:</strong></p>
+                  <ul class="text-sm space-y-1">
+                    <li class="flex items-center gap-2">
+                      <span class="w-1 h-1 rounded-full bg-primary"></span>
+                      IP address (anonymized where possible)
+                    </li>
+                    <li class="flex items-center gap-2">
+                      <span class="w-1 h-1 rounded-full bg-primary"></span>
+                      Browser type & device type
+                    </li>
+                    <li class="flex items-center gap-2">
+                      <span class="w-1 h-1 rounded-full bg-primary"></span>
+                      Pages visited
+                    </li>
+                  </ul>
+                </div>
+                <div class="grid gap-3 sm:grid-cols-2 text-sm">
+                  <div class="bg-muted/30 rounded-lg p-3">
+                    <span class="text-xs text-muted-foreground uppercase tracking-wider">Legal Basis</span>
+                    <p class="text-foreground mt-1">Consent (via Cookie Banner)</p>
+                  </div>
+                  <div class="bg-muted/30 rounded-lg p-3">
+                    <span class="text-xs text-muted-foreground uppercase tracking-wider">Processor</span>
+                    <p class="text-foreground mt-1">Google Ireland Limited</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- Section 3 -->
+        <section class="group">
+          <div class="flex items-start gap-4 mb-4">
+            <div class="p-3 rounded-xl bg-primary/10 text-primary shrink-0 group-hover:bg-primary group-hover:text-primary-foreground transition-colors">
+              <Settings className="w-6 h-6" />
+            </div>
+            <div>
+              <h2 class="text-2xl font-bold text-foreground">3. How We Use Your Data</h2>
+            </div>
+          </div>
+          <div class="pl-0 md:pl-[72px]">
+            <div class="grid gap-4 sm:grid-cols-2">
+              <div class="bg-card border border-border/50 rounded-xl p-5">
+                <h4 class="font-semibold text-foreground mb-2">To Communicate</h4>
+                <p class="text-sm text-muted-foreground">Solely to reply to inquiries you initiate.</p>
+              </div>
+              <div class="bg-card border border-border/50 rounded-xl p-5">
+                <h4 class="font-semibold text-foreground mb-2">To Improve the Site</h4>
+                <p class="text-sm text-muted-foreground">Aggregated, non-identifiable analytics data helps us decide which content to prioritize.</p>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- Section 4 -->
+        <section class="group">
+          <div class="flex items-start gap-4 mb-4">
+            <div class="p-3 rounded-xl bg-primary/10 text-primary shrink-0 group-hover:bg-primary group-hover:text-primary-foreground transition-colors">
+              <Share2 className="w-6 h-6" />
+            </div>
+            <div>
+              <h2 class="text-2xl font-bold text-foreground">4. Data Sharing & Transfers</h2>
+            </div>
+          </div>
+          <div class="pl-0 md:pl-[72px] space-y-4">
+            <div class="bg-green-500/10 border border-green-500/20 rounded-xl p-4 flex items-center gap-3">
+              <span class="text-green-500 text-xl">✓</span>
+              <p class="text-foreground font-medium">We do not sell, trade, or rent your personal data to third parties.</p>
+            </div>
+            
+            <div>
+              <h4 class="font-semibold text-foreground mb-3">Service Providers</h4>
+              <p class="text-muted-foreground mb-4">We share data only with the infrastructure providers necessary to run the site:</p>
+              <div class="grid gap-3 sm:grid-cols-2">
+                <div class="bg-card border border-border/50 rounded-xl p-4">
+                  <span class="text-xs text-muted-foreground uppercase tracking-wider">Hosting</span>
+                  <p class="text-foreground font-medium mt-1">Stores the website code</p>
+                </div>
+                <div class="bg-card border border-border/50 rounded-xl p-4">
+                  <span class="text-xs text-muted-foreground uppercase tracking-wider">Analytics</span>
+                  <p class="text-foreground font-medium mt-1">Google Analytics (processes traffic data)</p>
+                </div>
+              </div>
+            </div>
+
+            <div class="bg-muted/30 border border-border/50 rounded-xl p-4 mt-4">
+              <p class="text-sm text-muted-foreground">
+                <strong class="text-foreground">International Transfers:</strong> Google Analytics data may be processed on servers located in the United States. Google adheres to international data transfer frameworks (EU-US Data Privacy Framework) to ensure GDPR compliance.
+              </p>
+            </div>
+          </div>
+        </section>
+
+        <!-- Section 5 -->
+        <section class="group">
+          <div class="flex items-start gap-4 mb-4">
+            <div class="p-3 rounded-xl bg-primary/10 text-primary shrink-0 group-hover:bg-primary group-hover:text-primary-foreground transition-colors">
+              <UserCheck className="w-6 h-6" />
+            </div>
+            <div>
+              <h2 class="text-2xl font-bold text-foreground">5. Your Rights (GDPR)</h2>
+            </div>
+          </div>
+          <div class="pl-0 md:pl-[72px] space-y-4">
+            <p class="text-muted-foreground leading-relaxed">
+              Under European law, you have the following rights regarding your personal data:
+            </p>
+            <div class="grid gap-3 sm:grid-cols-2">
+              <div class="bg-card border border-border/50 rounded-xl p-4">
+                <h4 class="font-semibold text-foreground mb-1">Right of Access</h4>
+                <p class="text-sm text-muted-foreground">You can ask if we hold data about you.</p>
+              </div>
+              <div class="bg-card border border-border/50 rounded-xl p-4">
+                <h4 class="font-semibold text-foreground mb-1">Right to Erasure</h4>
+                <p class="text-sm text-muted-foreground">You can ask us to delete your email from our inbox.</p>
+              </div>
+              <div class="bg-card border border-border/50 rounded-xl p-4">
+                <h4 class="font-semibold text-foreground mb-1">Right to Rectification</h4>
+                <p class="text-sm text-muted-foreground">You can correct wrong information.</p>
+              </div>
+              <div class="bg-card border border-border/50 rounded-xl p-4">
+                <h4 class="font-semibold text-foreground mb-1">Right to Withdraw Consent</h4>
+                <p class="text-sm text-muted-foreground">You can reject cookies at any time via your browser settings.</p>
+              </div>
+            </div>
+            <div class="bg-primary/5 border border-primary/20 rounded-xl p-4 flex items-center gap-3">
+              <Mail className="w-5 h-5 text-primary shrink-0" />
+              <p class="text-muted-foreground">
+                To exercise any of these rights, email us at: <a href="mailto:muradmadi@gmail.com" class="text-primary hover:underline font-medium">muradmadi@gmail.com</a>
+              </p>
+            </div>
+          </div>
+        </section>
+
+        <!-- Section 6 -->
+        <section class="group">
+          <div class="flex items-start gap-4 mb-4">
+            <div class="p-3 rounded-xl bg-primary/10 text-primary shrink-0 group-hover:bg-primary group-hover:text-primary-foreground transition-colors">
+              <Cookie className="w-6 h-6" />
+            </div>
+            <div>
+              <h2 class="text-2xl font-bold text-foreground">6. Cookies Policy</h2>
+            </div>
+          </div>
+          <div class="pl-0 md:pl-[72px] space-y-4">
+            <p class="text-muted-foreground leading-relaxed">
+              This site uses cookies—small text files placed on your device.
+            </p>
+            <div class="grid gap-4 sm:grid-cols-2">
+              <div class="bg-card border border-border/50 rounded-xl p-5">
+                <div class="flex items-center gap-2 mb-2">
+                  <span class="w-2 h-2 rounded-full bg-green-500"></span>
+                  <h4 class="font-semibold text-foreground">Essential Cookies</h4>
+                </div>
+                <p class="text-sm text-muted-foreground">Required for the site to function (e.g., remembering your language preference).</p>
+              </div>
+              <div class="bg-card border border-border/50 rounded-xl p-5">
+                <div class="flex items-center gap-2 mb-2">
+                  <span class="w-2 h-2 rounded-full bg-yellow-500"></span>
+                  <h4 class="font-semibold text-foreground">Analytical Cookies</h4>
+                </div>
+                <p class="text-sm text-muted-foreground">Google Analytics tracks visitor behavior. You may block these via your browser settings or our Cookie Consent banner.</p>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- Section 7 -->
+        <section class="group">
+          <div class="flex items-start gap-4 mb-4">
+            <div class="p-3 rounded-xl bg-primary/10 text-primary shrink-0 group-hover:bg-primary group-hover:text-primary-foreground transition-colors">
+              <Lock className="w-6 h-6" />
+            </div>
+            <div>
+              <h2 class="text-2xl font-bold text-foreground">7. Security</h2>
+            </div>
+          </div>
+          <div class="pl-0 md:pl-[72px]">
+            <div class="bg-card border border-border/50 rounded-xl p-5 flex items-start gap-4">
+              <div class="p-2 rounded-lg bg-green-500/10 text-green-500 shrink-0">
+                <Lock className="w-5 h-5" />
+              </div>
+              <div>
+                <p class="text-muted-foreground leading-relaxed">
+                  We implement standard <strong class="text-foreground">SSL encryption (HTTPS)</strong> to protect data transmitted between your browser and our servers. However, no method of transmission over the Internet is 100% secure.
+                </p>
+              </div>
+            </div>
+          </div>
+        </section>
+
+      </div>
+
+      <!-- Footer CTA -->
+      <div class="mt-16 pt-8 border-t border-border/30 text-center">
+        <p class="text-muted-foreground mb-4">Have questions about your privacy?</p>
+        <a 
+          href="/contact" 
+          class="inline-flex items-center gap-2 px-6 py-3 rounded-full bg-primary text-primary-foreground font-semibold hover:bg-primary/90 transition-colors"
+        >
+          Contact Us
+        </a>
+      </div>
+
+    </div>
+  </main>
+</Layout>

@@ -1,0 +1,75 @@
+---
+import Layout from '@/layouts/Layout.astro';
+import Navbar from '@/components/layout/Navbar';
+import VenueCard from '@/components/cards/VenueCard.astro';
+import { Badge } from '@/components/ui/Badge';
+import { getPostBySlug } from '@/lib/api/wordpress';
+import type { Venue } from '@/types/wordpress';
+
+const { slug } = Astro.params;
+
+if (!slug) {
+  return Astro.redirect('/404');
+}
+
+const post = await getPostBySlug(slug!);
+
+if (!post) {
+  return new Response(null, {
+    status: 404,
+    statusText: 'Not Found'
+  });
+}
+
+const mentionedVenues = post.articleMeta?.mentionedVenues || [];
+const date = new Date(post.date).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' });
+---
+
+<Layout title={`${post.title} | Comolocal Guide`}>
+  <Navbar client:load />
+
+  <main class="container mx-auto px-4 py-8 md:py-12">
+    <article class="max-w-4xl mx-auto">
+        {/* Header */}
+        <header class="mb-8 md:mb-12 text-center max-w-2xl mx-auto">
+            <div class="flex items-center justify-center gap-2 mb-4">
+                <Badge variant="secondary" className="uppercase tracking-wider text-[10px]">Guide</Badge>
+                <span class="text-sm text-muted-foreground">{date}</span>
+            </div>
+            <h1 class="text-4xl md:text-5xl font-extrabold tracking-tight bg-gradient-to-br from-foreground to-muted-foreground bg-clip-text text-transparent mobile-title-fix pb-2">
+                {post.title}
+            </h1>
+        </header>
+
+        {/* Featured Image */}
+        {post.featuredImage && (
+            <div class="relative w-full aspect-[21/9] mb-12 overflow-hidden rounded-2xl border border-border/50 shadow-sm">
+                <img 
+                    src={post.featuredImage.node.sourceUrl} 
+                    alt={post.featuredImage.node.altText || post.title}
+                    class="absolute inset-0 w-full h-full object-cover"
+                />
+            </div>
+        )}
+
+        {/* Content */}
+        <div class="prose prose-zinc dark:prose-invert prose-lg max-w-none mb-16" set:html={post.content} />
+
+        {/* Smart Listicle Feature: "Mentioned in this Guide" */}
+        {mentionedVenues.length > 0 && (
+            <section class="border-t border-border pt-12 mt-12">
+                <div class="mb-8">
+                    <h2 class="text-3xl font-bold tracking-tight mb-2">Mentioned in this Guide</h2>
+                    <p class="text-muted-foreground">Check out the venues we talked about.</p>
+                </div>
+                
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                    {mentionedVenues.map((venue: Venue) => (
+                        <VenueCard venue={venue} />
+                    ))}
+                </div>
+            </section>
+        )}
+    </article>
+  </main>
+</Layout>

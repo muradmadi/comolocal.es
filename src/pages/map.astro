@@ -1,0 +1,82 @@
+---
+import Layout from '@/layouts/Layout.astro';
+import Navbar from '@/components/layout/Navbar';
+import PageHeader from '@/components/layout/PageHeader';
+import InteractiveMap from '@/components/map/InteractiveMap';
+import { getAllVenues } from '@/lib/api/wordpress';
+import type { Venue } from '@/types/wordpress';
+
+const venues = await getAllVenues();
+---
+
+<Layout title="Interactive Map | Comolocal">
+	<Navbar client:load />
+    
+	<main class="flex h-[calc(100vh-64px)] w-full overflow-hidden">
+        {/* Sidebar List - 20% width (min-width for readability) */}
+        <div class="hidden lg:flex w-1/5 min-w-[300px] flex-col h-full border-r border-border/50 bg-card/50 backdrop-blur-sm z-10">
+             <div class="p-4 border-b border-border/50">
+                 <h1 class="text-xl font-bold font-heading">Nightlife Map</h1>
+                 <p class="text-xs text-muted-foreground mt-1">Found {venues.length} venues in Madrid</p>
+             </div>
+             
+             <div class="flex-1 overflow-y-auto custom-scrollbar p-3 space-y-3">
+                {venues.map((venue: Venue) => (
+                    <a href={`/venues/${venue.slug}`} class="block group">
+                        <div class="bg-card border border-border/50 rounded-lg overflow-hidden hover:border-primary/50 transition-all duration-300 hover:bg-accent/5 flex flex-row h-20">
+                            <div class="w-20 h-full bg-muted relative shrink-0">
+                                {venue.featuredImage?.node?.sourceUrl ? (
+                                    <img 
+                                        src={venue.featuredImage.node.sourceUrl} 
+                                        alt={venue.title} 
+                                        class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
+                                    />
+                                ) : (
+                                    <div class="w-full h-full flex items-center justify-center bg-primary/10 text-primary">
+                                        <span class="text-xl">📍</span>
+                                    </div>
+                                )}
+                            </div>
+                            <div class="p-2.5 flex flex-col justify-center min-w-0">
+                                <h3 class="font-bold text-sm truncate group-hover:text-primary transition-colors">{venue.title}</h3>
+                                <div class="flex items-center gap-1 mt-1">
+                                    <span class="text-[10px] px-1.5 py-0.5 rounded-full bg-secondary text-secondary-foreground font-medium truncate">
+                                        {venue.venueSchemaData.cocktailPrice ? `€${venue.venueSchemaData.cocktailPrice}` : 'Bar'}
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                    </a>
+                ))}
+             </div>
+        </div>
+
+        {/* Full Map - 80% width */}
+        <div class="flex-1 relative bg-muted">
+            <InteractiveMap 
+                client:only="react" 
+                venues={venues} 
+                className="absolute inset-0 w-full h-full rounded-none border-none"
+            />
+            
+            {/* Mobile-only overlay for list access could go here if needed later */}
+        </div>
+	</main>
+</Layout>
+
+<style>
+  /* Custom scrollbar for the list */
+  .custom-scrollbar::-webkit-scrollbar {
+    width: 6px;
+  }
+  .custom-scrollbar::-webkit-scrollbar-track {
+    background: transparent;
+  }
+  .custom-scrollbar::-webkit-scrollbar-thumb {
+    background-color: hsl(var(--muted));
+    border-radius: 20px;
+  }
+  .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+    background-color: hsl(var(--muted-foreground));
+  }
+</style>

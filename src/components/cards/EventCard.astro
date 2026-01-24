@@ -1,0 +1,90 @@
+---
+import { Card, CardContent, CardHeader, CardTitle, CardFooter } from "@/components/ui/Card";
+import { Badge } from "@/components/ui/Badge";
+import { Button } from "@/components/ui/Button";
+import type { Event } from "@/types/wordpress";
+
+interface Props {
+  event: Event;
+}
+
+const { event } = Astro.props;
+
+// Safe data access
+const image = event.featuredImage?.node?.sourceUrl;
+const alt = event.featuredImage?.node?.altText || event.title;
+const venue = event.eventData?.relatedVenue?.nodes?.[0];
+
+// Date formatting
+function formatDate(dateString: string) {
+    const date = new Date(dateString);
+    return {
+        day: date.getDate(),
+        month: date.toLocaleDateString('en-US', { month: 'short' }),
+        weekday: date.toLocaleDateString('en-US', { weekday: 'short' }),
+        time: date.toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit' })
+    };
+}
+
+const startDate = event.eventData?.eventStart ? formatDate(event.eventData.eventStart) : null;
+---
+
+<Card className="flex flex-col h-full hover:border-primary/50 transition-colors duration-300 group overflow-hidden">
+  <div class="h-48 overflow-hidden relative bg-muted">
+    {image ? (
+        <img 
+            src={image} 
+            alt={alt} 
+            class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+        />
+    ) : (
+        <div class="flex items-center justify-center h-full bg-gradient-to-br from-primary/20 to-accent/20">
+            {startDate && (
+                <div class="text-center">
+                    <span class="block text-4xl font-black text-primary">{startDate.day}</span>
+                    <span class="block text-sm uppercase font-bold text-primary/80">{startDate.month}</span>
+                </div>
+            )}
+        </div>
+    )}
+    
+    {/* Date badge overlay */}
+    {startDate && image && (
+        <div class="absolute top-3 left-3">
+            <div class="bg-background/90 backdrop-blur rounded-lg px-3 py-2 text-center shadow-lg border border-border/50">
+                <span class="block text-lg font-black leading-none text-foreground">{startDate.day}</span>
+                <span class="block text-[10px] uppercase font-bold text-muted-foreground">{startDate.month}</span>
+            </div>
+        </div>
+    )}
+  </div>
+  
+  <CardHeader>
+    <CardTitle className="text-xl leading-tight group-hover:text-primary transition-colors line-clamp-2">
+        {event.title}
+    </CardTitle>
+    {venue && (
+        <a href={`/venues/${venue.slug}`} class="text-sm text-muted-foreground hover:text-primary transition-colors">
+            @ {venue.title}
+        </a>
+    )}
+  </CardHeader>
+  
+  <CardContent class="flex-1">
+     <div class="flex flex-wrap gap-2">
+        {startDate && (
+            <Badge variant="secondary" className="text-xs">
+                {startDate.weekday} {startDate.time}
+            </Badge>
+        )}
+     </div>
+  </CardContent>
+
+  <CardFooter>
+    <a href={`/events/${event.slug}`} class="w-full">
+      <Button variant="secondary" className="w-full group-hover:bg-primary group-hover:text-primary-foreground transition-colors">
+          View Event
+      </Button>
+    </a>
+  </CardFooter>
+</Card>

@@ -1,0 +1,256 @@
+---
+import Layout from '../layouts/Layout.astro';
+import Navbar from '../components/layout/Navbar';
+import PageHeader from '../components/layout/PageHeader';
+import { FileText, Info, AlertTriangle, Shield, Link2, Scale, Globe, RefreshCw } from 'lucide-react';
+---
+
+<Layout title="Terms of Service | ComoLocal">
+  <Navbar client:load />
+  
+  <main class="flex-1">
+    <PageHeader 
+      title="Terms of Service" 
+      subtitle="Last updated: January 2026"
+    />
+
+    <div class="container mx-auto px-4 max-w-4xl py-12 md:py-20">
+      
+      <!-- Intro Card -->
+      <div class="bg-card/50 border border-border/50 rounded-2xl p-6 md:p-8 mb-12 backdrop-blur-sm">
+        <p class="text-muted-foreground text-lg leading-relaxed">
+          Welcome to ComoLocal. These terms govern your use of our platform. Please read them carefully before using the Site.
+        </p>
+      </div>
+
+      <div class="space-y-12">
+
+        <!-- Section 1 -->
+        <section class="group">
+          <div class="flex items-start gap-4 mb-4">
+            <div class="p-3 rounded-xl bg-primary/10 text-primary shrink-0 group-hover:bg-primary group-hover:text-primary-foreground transition-colors">
+              <FileText className="w-6 h-6" />
+            </div>
+            <div>
+              <h2 class="text-2xl font-bold text-foreground">1. Acceptance of Terms</h2>
+            </div>
+          </div>
+          <div class="pl-0 md:pl-[72px]">
+            <p class="text-muted-foreground leading-relaxed">
+              By accessing comolocal.es ("the Site"), you agree to be bound by these Terms of Service. 
+              The Site is operated by ComoLocal ("we," "us," or "our"). If you do not agree, you are prohibited from using this Site.
+            </p>
+          </div>
+        </section>
+
+        <!-- Section 2 -->
+        <section class="group">
+          <div class="flex items-start gap-4 mb-4">
+            <div class="p-3 rounded-xl bg-primary/10 text-primary shrink-0 group-hover:bg-primary group-hover:text-primary-foreground transition-colors">
+              <Info className="w-6 h-6" />
+            </div>
+            <div>
+              <h2 class="text-2xl font-bold text-foreground">2. Nature of Service</h2>
+              <span class="text-sm text-primary font-medium">Informational Only</span>
+            </div>
+          </div>
+          <div class="pl-0 md:pl-[72px] space-y-4">
+            <p class="text-muted-foreground leading-relaxed">
+              The Site is strictly an <strong class="text-foreground">informational aggregator and editorial platform</strong> providing data on nightlife venues, events, and related cultural advice in Madrid.
+            </p>
+            <ul class="space-y-3">
+              <li class="flex items-start gap-3">
+                <span class="w-1.5 h-1.5 rounded-full bg-primary mt-2.5 shrink-0"></span>
+                <span class="text-muted-foreground">We do not own, operate, or control the venues or events listed.</span>
+              </li>
+              <li class="flex items-start gap-3">
+                <span class="w-1.5 h-1.5 rounded-full bg-primary mt-2.5 shrink-0"></span>
+                <span class="text-muted-foreground">We are not a ticketing agent (unless explicitly stated otherwise) and constitute no contractual relationship between you and any venue.</span>
+              </li>
+              <li class="flex items-start gap-3">
+                <span class="w-1.5 h-1.5 rounded-full bg-primary mt-2.5 shrink-0"></span>
+                <span class="text-muted-foreground">All guides and blog posts constitute editorial opinion, not professional or legal advice.</span>
+              </li>
+            </ul>
+          </div>
+        </section>
+
+        <!-- Section 3 - Critical -->
+        <section class="group">
+          <div class="flex items-start gap-4 mb-4">
+            <div class="p-3 rounded-xl bg-destructive/10 text-destructive shrink-0">
+              <AlertTriangle className="w-6 h-6" />
+            </div>
+            <div>
+              <h2 class="text-2xl font-bold text-foreground">3. Data Accuracy & Disclaimer</h2>
+              <span class="text-sm text-destructive font-medium">Critical — Please Read</span>
+            </div>
+          </div>
+          <div class="pl-0 md:pl-[72px] space-y-4">
+            <div class="bg-destructive/5 border border-destructive/20 rounded-xl p-4 md:p-6">
+              <p class="text-foreground leading-relaxed">
+                <strong>This is the most critical term regarding your use of the Site.</strong> Information regarding venues (opening hours, entry fees, dress codes, line-ups) and events is subject to frequent change by the third-party organizers. While we strive for accuracy, we do not guarantee the validity of any listing.
+              </p>
+            </div>
+            <div class="grid gap-4 md:grid-cols-2">
+              <div class="bg-card border border-border/50 rounded-xl p-5">
+                <h4 class="font-semibold text-foreground mb-2">Zero Liability for Changes</h4>
+                <p class="text-sm text-muted-foreground">We are not liable if a venue is closed, an event is cancelled, or if entry prices differ from those listed. You are solely responsible for verifying details directly with the venue.</p>
+              </div>
+              <div class="bg-card border border-border/50 rounded-xl p-5">
+                <h4 class="font-semibold text-foreground mb-2">No Warranty</h4>
+                <p class="text-sm text-muted-foreground">The content is provided "AS IS" without warranties of any kind, either express or implied.</p>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- Section 4 -->
+        <section class="group">
+          <div class="flex items-start gap-4 mb-4">
+            <div class="p-3 rounded-xl bg-primary/10 text-primary shrink-0 group-hover:bg-primary group-hover:text-primary-foreground transition-colors">
+              <Shield className="w-6 h-6" />
+            </div>
+            <div>
+              <h2 class="text-2xl font-bold text-foreground">4. Intellectual Property & Anti-Scraping</h2>
+            </div>
+          </div>
+          <div class="pl-0 md:pl-[72px] space-y-6">
+            <div>
+              <h4 class="font-semibold text-foreground mb-2">A. Our Content</h4>
+              <p class="text-muted-foreground leading-relaxed">
+                The Site's design, source code, "look and feel," and original editorial content (blog posts, curated "best of" lists, photos taken by us) are owned by ComoLocal and protected by copyright and intellectual property laws.
+              </p>
+            </div>
+            <div>
+              <h4 class="font-semibold text-foreground mb-2">B. Third-Party References</h4>
+              <p class="text-muted-foreground leading-relaxed">
+                Venue names, logos, and event imagery used on the Site are the property of their respective owners. We use them for identification and informational purposes only.
+              </p>
+            </div>
+            <div>
+              <h4 class="font-semibold text-foreground mb-2">C. Prohibited Use</h4>
+              <p class="text-muted-foreground leading-relaxed mb-3">
+                You are granted a limited license to access the Site for personal, non-commercial use. You strictly may not:
+              </p>
+              <ul class="space-y-2">
+                <li class="flex items-start gap-3 text-muted-foreground">
+                  <span class="text-destructive font-bold">✕</span>
+                  <span>Use any robot, spider, scraper, or other automated means to access the Site without our express written permission.</span>
+                </li>
+                <li class="flex items-start gap-3 text-muted-foreground">
+                  <span class="text-destructive font-bold">✕</span>
+                  <span>Republish, sell, or sub-license material from the Site.</span>
+                </li>
+                <li class="flex items-start gap-3 text-muted-foreground">
+                  <span class="text-destructive font-bold">✕</span>
+                  <span>Mirror or frame the Site on any other website.</span>
+                </li>
+              </ul>
+            </div>
+          </div>
+        </section>
+
+        <!-- Section 5 -->
+        <section class="group">
+          <div class="flex items-start gap-4 mb-4">
+            <div class="p-3 rounded-xl bg-primary/10 text-primary shrink-0 group-hover:bg-primary group-hover:text-primary-foreground transition-colors">
+              <Link2 className="w-6 h-6" />
+            </div>
+            <div>
+              <h2 class="text-2xl font-bold text-foreground">5. Third-Party Links</h2>
+            </div>
+          </div>
+          <div class="pl-0 md:pl-[72px]">
+            <p class="text-muted-foreground leading-relaxed">
+              The Site contains links to third-party websites (e.g., ticket vendors, official venue sites). We have no control over, and assume no responsibility for, the content, privacy policies, or practices of any third-party sites. Accessing them is at your own risk.
+            </p>
+          </div>
+        </section>
+
+        <!-- Section 6 -->
+        <section class="group">
+          <div class="flex items-start gap-4 mb-4">
+            <div class="p-3 rounded-xl bg-primary/10 text-primary shrink-0 group-hover:bg-primary group-hover:text-primary-foreground transition-colors">
+              <Scale className="w-6 h-6" />
+            </div>
+            <div>
+              <h2 class="text-2xl font-bold text-foreground">6. Limitation of Liability</h2>
+            </div>
+          </div>
+          <div class="pl-0 md:pl-[72px] space-y-4">
+            <p class="text-muted-foreground leading-relaxed">
+              To the fullest extent permitted by Spanish law: In no event shall ComoLocal be liable for any direct, indirect, incidental, or consequential damages arising out of:
+            </p>
+            <ul class="space-y-2">
+              <li class="flex items-start gap-3 text-muted-foreground">
+                <span class="w-1.5 h-1.5 rounded-full bg-primary mt-2.5 shrink-0"></span>
+                <span>Your use of, or inability to use, the Site.</span>
+              </li>
+              <li class="flex items-start gap-3 text-muted-foreground">
+                <span class="w-1.5 h-1.5 rounded-full bg-primary mt-2.5 shrink-0"></span>
+                <span>Any conduct or content of any third party (including physical incidents at venues listed on the Site).</span>
+              </li>
+              <li class="flex items-start gap-3 text-muted-foreground">
+                <span class="w-1.5 h-1.5 rounded-full bg-primary mt-2.5 shrink-0"></span>
+                <span>Reliance on any information obtained from the Site.</span>
+              </li>
+            </ul>
+            <div class="bg-muted/30 border border-border/50 rounded-xl p-4 mt-4">
+              <p class="text-sm text-muted-foreground">
+                <strong class="text-foreground">Security Note:</strong> While we do not process user data or accounts, browsing the internet carries inherent risks. We are not liable for any damage to your computer system or loss of data resulting from your access to the Site.
+              </p>
+            </div>
+          </div>
+        </section>
+
+        <!-- Section 7 -->
+        <section class="group">
+          <div class="flex items-start gap-4 mb-4">
+            <div class="p-3 rounded-xl bg-primary/10 text-primary shrink-0 group-hover:bg-primary group-hover:text-primary-foreground transition-colors">
+              <Globe className="w-6 h-6" />
+            </div>
+            <div>
+              <h2 class="text-2xl font-bold text-foreground">7. Governing Law & Jurisdiction</h2>
+            </div>
+          </div>
+          <div class="pl-0 md:pl-[72px]">
+            <p class="text-muted-foreground leading-relaxed">
+              These Terms shall be governed by the laws of <strong class="text-foreground">Spain</strong>. Any dispute arising from these Terms or your use of the Site shall be subject to the exclusive jurisdiction of the courts of <strong class="text-foreground">Madrid, Spain</strong>.
+            </p>
+          </div>
+        </section>
+
+        <!-- Section 8 -->
+        <section class="group">
+          <div class="flex items-start gap-4 mb-4">
+            <div class="p-3 rounded-xl bg-primary/10 text-primary shrink-0 group-hover:bg-primary group-hover:text-primary-foreground transition-colors">
+              <RefreshCw className="w-6 h-6" />
+            </div>
+            <div>
+              <h2 class="text-2xl font-bold text-foreground">8. Modifications</h2>
+            </div>
+          </div>
+          <div class="pl-0 md:pl-[72px]">
+            <p class="text-muted-foreground leading-relaxed">
+              We reserve the right to modify these terms at any time. Significant changes will be indicated by an update to the "Last Updated" date at the top of this page. Your continued use of the Site constitutes acceptance of the new Terms.
+            </p>
+          </div>
+        </section>
+
+      </div>
+
+      <!-- Footer CTA -->
+      <div class="mt-16 pt-8 border-t border-border/30 text-center">
+        <p class="text-muted-foreground mb-4">Have questions about these terms?</p>
+        <a 
+          href="/contact" 
+          class="inline-flex items-center gap-2 px-6 py-3 rounded-full bg-primary text-primary-foreground font-semibold hover:bg-primary/90 transition-colors"
+        >
+          Contact Us
+        </a>
+      </div>
+
+    </div>
+  </main>
+</Layout>

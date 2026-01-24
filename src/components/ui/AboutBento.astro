@@ -1,0 +1,249 @@
+---
+const { slug = "teatro-kapital" } = Astro.props;
+
+let venue = null;
+let posts = [];
+let eventCount = 0;
+let recentEventsWithImages = [];
+let error = null;
+
+try {
+  const response = await fetch(import.meta.env.WORDPRESS_API_URL, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      query: `
+        query GetBentoData($slug: ID!) {
+          venue(id: $slug, idType: SLUG) {
+            title
+            excerpt
+            slug
+            featuredImage {
+              node {
+                sourceUrl
+                altText
+              }
+            }
+          }
+          posts(first: 4) {
+            nodes {
+              title
+              slug
+              date
+              excerpt
+              categories {
+                nodes {
+                  name
+                }
+              }
+            }
+          }
+          events(first: 100) {
+            nodes {
+              id
+              featuredImage {
+                node {
+                  sourceUrl
+                }
+              }
+            }
+          }
+        }
+      `,
+      variables: { slug }
+    }),
+  });
+
+  const { data } = await response.json();
+  venue = data?.venue;
+  posts = data?.posts?.nodes || [];
+  
+  const allEvents = data?.events?.nodes || [];
+  eventCount = allEvents.length;
+  
+  // Get up to 3 events that have images for the avatars
+  recentEventsWithImages = allEvents
+    .filter(e => e.featuredImage?.node?.sourceUrl)
+    .slice(0, 3);
+  
+} catch (e) {
+  console.error("Failed to fetch data for Bento grid:", e);
+  error = e;
+}
+
+// Fallback data if fetch fails
+const fallbackVenue = {
+  title: "Teatro Kapital: The 7-Story Beast",
+  excerpt: "<p>Kapital isn't just a club; it's a rite of passage for every student in Madrid. With seven distinct floors, each offering a completely different vibe—from the main room's house anthems to the rooftop's chill lounge—it represents the chaos and variety of Madrid's nightlife in a single building.</p>",
+  featuredImage: {
+    node: {
+      sourceUrl: "https://images.unsplash.com/photo-1570572127393-5754045ad35b?q=80&w=1000&auto=format&fit=crop",
+      altText: "Featured Venue"
+    }
+  },
+  slug: 'teatro-kapital'
+};
+
+const displayVenue = venue || fallbackVenue;
+const venueLink = `/venues/${displayVenue.slug}`;
+
+function formatDate(dateString) {
+    if (!dateString) return '';
+    return new Date(dateString).toLocaleDateString('en-US', {
+        month: 'short',
+        day: 'numeric'
+    });
+}
+---
+
+<section class="py-24 bg-background relative overflow-hidden">
+  <div class="container mx-auto px-4">
+    <!-- Section Header -->
+    <div class="mb-12 max-w-2xl">
+      <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-accent/10 text-accent text-sm font-medium border border-accent/20 mb-4">
+        <span class="w-2 h-2 rounded-full bg-accent animate-pulse"></span>
+        Philosophy
+      </div>
+      <h2 class="text-4xl md:text-5xl font-black tracking-tight leading-tight mb-4">
+        The ComoLocal <span class="text-transparent bg-clip-text bg-gradient-to-r from-primary to-purple-400">Blueprint</span>
+      </h2>
+      <p class="text-muted-foreground text-lg">
+        We don't just list places. We curate experiences. Here's how we break down the city's nightlife into a science.
+      </p>
+    </div>
+
+    <!-- The Bento Grid -->
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-4 md:gap-6 auto-rows-[minmax(100px,auto)]">
+      
+      <!-- Box A: Large (Featured Venue / Deep Dive) -->
+      <a href={venueLink} class="group relative md:col-span-2 rounded-3xl bg-card border border-border/50 overflow-hidden min-h-[400px] flex flex-col transition-all hover:border-primary/50">
+        <div class="absolute inset-0 z-0">
+           <!-- Dark overlay gradient -->
+            <div class="absolute inset-0 bg-gradient-to-t from-background via-background/80 to-transparent z-10 w-full h-full"></div>
+             <!-- Image -->
+            <img src={displayVenue.featuredImage?.node?.sourceUrl} 
+                 alt={displayVenue.featuredImage?.node?.altText || displayVenue.title} 
+                 class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105 opacity-60" />
+        </div>
+        
+        <div class="relative z-20 p-8 flex flex-col h-full justify-end">
+          <div class="mb-auto">
+            <span class="inline-block px-3 py-1 rounded-full bg-primary/20 text-primary text-xs font-bold uppercase tracking-wider border border-primary/20 backdrop-blur-md mb-4">
+              Editor's Choice
+            </span>
+          </div>
+          
+          <h3 class="text-3xl font-bold text-foreground mb-4">{displayVenue.title}</h3>
+          
+          <div class="prose prose-invert max-w-none text-muted-foreground line-clamp-4">
+            <div set:html={displayVenue.excerpt} />
+          </div>
+          
+          <div class="mt-6 flex items-center gap-4">
+            <span class="px-6 py-2 rounded-full bg-foreground text-background font-bold text-sm group-hover:bg-foreground/90 transition-colors">
+              Read Analysis
+            </span>
+          </div>
+        </div>
+      </a>
+
+      <!-- Box B: Tall (Blog List) -->
+      <div class="md:col-span-1 md:row-span-2 rounded-3xl bg-card/50 border border-border/50 backdrop-blur-sm p-6 flex flex-col">
+        <div class="flex items-center justify-between mb-6">
+          <h3 class="text-xl font-bold flex items-center gap-2">
+            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-accent"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>
+            Latest Guides
+          </h3>
+          <a href="/blog" class="text-xs text-primary hover:underline">View all</a>
+        </div>
+
+        <div class="flex-1 space-y-4 overflow-y-auto pr-2 custom-scrollbar">
+            {posts.length > 0 ? (
+                posts.map(post => (
+                    <a href={`/blog/${post.slug}`} class="block p-4 rounded-2xl bg-background/50 border border-white/5 hover:bg-background/80 hover:border-primary/30 transition-all group">
+                        <div class="text-xs text-muted-foreground mb-1 flex justify-between">
+                            <span>{formatDate(post.date)} • {post.categories?.nodes[0]?.name || 'Guide'}</span>
+                        </div>
+                        <h4 class="font-bold text-foreground group-hover:text-primary transition-colors leading-snug mb-2 line-clamp-2">
+                            {post.title}
+                        </h4>
+                        <div class="text-xs text-muted-foreground line-clamp-2" set:html={post.excerpt}></div>
+                    </a>
+                ))
+            ) : (
+                <div class="text-center py-12 text-muted-foreground text-sm">
+                    <p>New guides coming soon.</p>
+                </div>
+            )}
+        </div>
+      </div>
+
+      <!-- Box C: Small (Stats / Social Proof) -->
+      <div class="md:col-span-2 rounded-3xl bg-gradient-to-br from-primary/10 via-primary/5 to-transparent border border-primary/20 p-6 sm:p-8 flex items-center justify-between relative overflow-hidden group">
+        <!-- Animated Background Element -->
+        <div class="absolute right-0 top-1/2 -translate-y-1/2 w-64 h-64 bg-primary/20 blur-[80px] rounded-full group-hover:bg-primary/30 transition-colors duration-700"></div>
+        
+        <div class="relative z-10 flex flex-col sm:flex-row items-start sm:items-center gap-6 sm:gap-12 w-full">
+            <div class="flex flex-col">
+                <span class="text-5xl sm:text-7xl font-black text-transparent bg-clip-text bg-gradient-to-b from-foreground to-foreground/50 tracking-tighter">
+                    {eventCount}{eventCount >= 100 ? '+' : ''}
+                </span>
+                <span class="text-lg text-muted-foreground font-medium">Events Tracked</span>
+            </div>
+            
+            <div class="h-12 w-px bg-border hidden sm:block"></div>
+            
+            <div class="flex-1 max-w-sm">
+                <p class="text-sm text-foreground/80 leading-relaxed">
+                    Our database updates daily. We scrape promoters, ticket sites, and venue calendars so you never miss a beat.
+                </p>
+            </div>
+
+            <div class="ml-auto flex -space-x-4">
+               <!-- Event Images Avatars -->
+               {recentEventsWithImages.map((event, i) => (
+                  <div class="w-10 h-10 rounded-full border-2 border-background overflow-hidden bg-slate-800 relative z-10 flex items-center justify-center p-1">
+                    <img 
+                      src={event.featuredImage.node.sourceUrl} 
+                      alt="Event" 
+                      class="w-full h-full object-cover rounded-full"
+                    />
+                  </div>
+               ))}
+               
+               {/* If we don't have enough images, show placeholders or just the counter */}
+               {recentEventsWithImages.length === 0 && (
+                   <>
+                    <div class="w-10 h-10 rounded-full border-2 border-background bg-slate-700 flex items-center justify-center text-xs font-bold">JD</div>
+                    <div class="w-10 h-10 rounded-full border-2 border-background bg-slate-600 flex items-center justify-center text-xs font-bold">AM</div>
+                   </>
+               )}
+
+               <div class="w-10 h-10 rounded-full border-2 border-background bg-slate-500 flex items-center justify-center text-xs font-bold font-mono z-20">
+                 {eventCount > 50 ? '50+' : `${Math.floor(eventCount / 10)}+`}
+               </div>
+            </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+
+
+<style>
+.custom-scrollbar::-webkit-scrollbar {
+  width: 4px;
+}
+.custom-scrollbar::-webkit-scrollbar-track {
+  background: rgba(255, 255, 255, 0.02);
+}
+.custom-scrollbar::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 10px;
+}
+.custom-scrollbar::-webkit-scrollbar-thumb:hover {
+  background: rgba(255, 255, 255, 0.2);
+}
+</style>

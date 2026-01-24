@@ -1,0 +1,217 @@
+---
+import Layout from '../layouts/Layout.astro';
+import Navbar from '../components/layout/Navbar';
+import PageHeader from '../components/layout/PageHeader';
+import { getAllVenues, getAllPosts, getAllEvents } from '../lib/api/wordpress';
+import { Map, Calendar, BookOpen, Users, Mail, FileText, Shield, Home, MapPin, Compass } from 'lucide-react';
+
+// Fetch dynamic content
+const venues = await getAllVenues();
+const posts = await getAllPosts();
+const events = await getAllEvents();
+
+// Limit displayed items
+const displayedVenues = venues.slice(0, 12);
+const displayedPosts = posts.slice(0, 8);
+const displayedEvents = events.slice(0, 6);
+
+const sections = [
+  {
+    title: 'Main Pages',
+    icon: Home,
+    links: [
+      { name: 'Home', href: '/', description: 'Discover Madrid nightlife' },
+      { name: 'Venues', href: '/venues', description: 'Browse all bars & clubs' },
+      { name: 'Events', href: '/events', description: 'Upcoming parties & events' },
+      { name: 'Blog', href: '/blog', description: 'Guides & stories' },
+      { name: 'Map', href: '/map', description: 'Interactive venue map' },
+      { name: 'Contact', href: '/contact', description: 'Get in touch' },
+    ]
+  },
+  {
+    title: 'Legal',
+    icon: Shield,
+    links: [
+      { name: 'Privacy Policy', href: '/privacy', description: 'How we handle your data' },
+      { name: 'Terms of Service', href: '/terms', description: 'Rules of using our site' },
+    ]
+  }
+];
+---
+
+<Layout title="Sitemap | ComoLocal">
+  <Navbar client:load />
+  
+  <main class="flex-1">
+    <PageHeader 
+      title="Sitemap" 
+      subtitle="A complete overview of everything on ComoLocal"
+    />
+
+    <div class="container mx-auto px-4 max-w-6xl py-12 md:py-20">
+      
+      <!-- Intro -->
+      <div class="bg-card/50 border border-border/50 rounded-2xl p-6 md:p-8 mb-12 backdrop-blur-sm">
+        <p class="text-muted-foreground text-lg leading-relaxed">
+          Use this page to navigate all sections of ComoLocal. Looking for something specific? Try our <a href="/venues" class="text-primary hover:underline">venue search</a> or <a href="/map" class="text-primary hover:underline">interactive map</a>.
+        </p>
+      </div>
+
+      <div class="grid gap-12 lg:gap-16">
+
+        <!-- Static Sections -->
+        {sections.map((section) => (
+          <section>
+            <div class="flex items-center gap-3 mb-6">
+              <div class="p-2 rounded-lg bg-primary/10 text-primary">
+                <section.icon className="w-5 h-5" />
+              </div>
+              <h2 class="text-2xl font-bold text-foreground">{section.title}</h2>
+            </div>
+            <div class="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
+              {section.links.map((link) => (
+                <a 
+                  href={link.href} 
+                  class="group bg-card border border-border/50 rounded-xl p-4 hover:border-primary/50 hover:bg-accent/5 transition-all"
+                >
+                  <h3 class="font-semibold text-foreground group-hover:text-primary transition-colors">{link.name}</h3>
+                  <p class="text-sm text-muted-foreground mt-1">{link.description}</p>
+                </a>
+              ))}
+            </div>
+          </section>
+        ))}
+
+        <!-- Venues Section -->
+        {displayedVenues.length > 0 && (
+          <section>
+            <div class="flex items-center justify-between mb-6">
+              <div class="flex items-center gap-3">
+                <div class="p-2 rounded-lg bg-primary/10 text-primary">
+                  <MapPin className="w-5 h-5" />
+                </div>
+                <h2 class="text-2xl font-bold text-foreground">Venues</h2>
+                <span class="text-sm text-muted-foreground">({venues.length} total)</span>
+              </div>
+              <a href="/venues" class="text-sm text-primary hover:underline">View all →</a>
+            </div>
+            <div class="grid gap-2 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+              {displayedVenues.map((venue) => (
+                <a 
+                  href={`/venues/${venue.slug}`} 
+                  class="group flex items-center gap-3 bg-card/50 border border-border/30 rounded-lg p-3 hover:border-primary/50 hover:bg-card transition-all"
+                >
+                  {venue.featuredImage?.node?.sourceUrl ? (
+                    <img 
+                      src={venue.featuredImage.node.sourceUrl} 
+                      alt={venue.title}
+                      class="w-10 h-10 rounded-lg object-cover shrink-0"
+                    />
+                  ) : (
+                    <div class="w-10 h-10 rounded-lg bg-primary/10 flex items-center justify-center shrink-0">
+                      <MapPin className="w-4 h-4 text-primary" />
+                    </div>
+                  )}
+                  <span class="text-sm font-medium text-foreground group-hover:text-primary transition-colors truncate">{venue.title}</span>
+                </a>
+              ))}
+            </div>
+            {venues.length > 12 && (
+              <p class="text-sm text-muted-foreground mt-4 text-center">
+                + {venues.length - 12} more venues. <a href="/venues" class="text-primary hover:underline">See all</a>
+              </p>
+            )}
+          </section>
+        )}
+
+        <!-- Events Section -->
+        {displayedEvents.length > 0 && (
+          <section>
+            <div class="flex items-center justify-between mb-6">
+              <div class="flex items-center gap-3">
+                <div class="p-2 rounded-lg bg-primary/10 text-primary">
+                  <Calendar className="w-5 h-5" />
+                </div>
+                <h2 class="text-2xl font-bold text-foreground">Events</h2>
+                <span class="text-sm text-muted-foreground">({events.length} total)</span>
+              </div>
+              <a href="/events" class="text-sm text-primary hover:underline">View all →</a>
+            </div>
+            <div class="grid gap-2 sm:grid-cols-2 lg:grid-cols-3">
+              {displayedEvents.map((event) => (
+                <a 
+                  href={`/events/${event.slug}`} 
+                  class="group flex items-center gap-3 bg-card/50 border border-border/30 rounded-lg p-3 hover:border-primary/50 hover:bg-card transition-all"
+                >
+                  <div class="w-10 h-10 rounded-lg bg-primary/10 flex items-center justify-center shrink-0">
+                    <Calendar className="w-4 h-4 text-primary" />
+                  </div>
+                  <span class="text-sm font-medium text-foreground group-hover:text-primary transition-colors truncate">{event.title}</span>
+                </a>
+              ))}
+            </div>
+            {events.length > 6 && (
+              <p class="text-sm text-muted-foreground mt-4 text-center">
+                + {events.length - 6} more events. <a href="/events" class="text-primary hover:underline">See all</a>
+              </p>
+            )}
+          </section>
+        )}
+
+        <!-- Blog Section -->
+        {displayedPosts.length > 0 && (
+          <section>
+            <div class="flex items-center justify-between mb-6">
+              <div class="flex items-center gap-3">
+                <div class="p-2 rounded-lg bg-primary/10 text-primary">
+                  <BookOpen className="w-5 h-5" />
+                </div>
+                <h2 class="text-2xl font-bold text-foreground">Blog Posts</h2>
+                <span class="text-sm text-muted-foreground">({posts.length} total)</span>
+              </div>
+              <a href="/blog" class="text-sm text-primary hover:underline">View all →</a>
+            </div>
+            <div class="grid gap-2 sm:grid-cols-2">
+              {displayedPosts.map((post) => (
+                <a 
+                  href={`/blog/${post.slug}`} 
+                  class="group flex items-center gap-3 bg-card/50 border border-border/30 rounded-lg p-3 hover:border-primary/50 hover:bg-card transition-all"
+                >
+                  {post.featuredImage?.node?.sourceUrl ? (
+                    <img 
+                      src={post.featuredImage.node.sourceUrl} 
+                      alt={post.title}
+                      class="w-10 h-10 rounded-lg object-cover shrink-0"
+                    />
+                  ) : (
+                    <div class="w-10 h-10 rounded-lg bg-primary/10 flex items-center justify-center shrink-0">
+                      <BookOpen className="w-4 h-4 text-primary" />
+                    </div>
+                  )}
+                  <span class="text-sm font-medium text-foreground group-hover:text-primary transition-colors truncate">{post.title}</span>
+                </a>
+              ))}
+            </div>
+            {posts.length > 8 && (
+              <p class="text-sm text-muted-foreground mt-4 text-center">
+                + {posts.length - 8} more articles. <a href="/blog" class="text-primary hover:underline">See all</a>
+              </p>
+            )}
+          </section>
+        )}
+
+      </div>
+
+      <!-- XML Sitemap Note -->
+      <div class="mt-16 pt-8 border-t border-border/30">
+        <div class="bg-muted/20 rounded-xl p-6 text-center">
+          <p class="text-sm text-muted-foreground">
+            <strong class="text-foreground">For Search Engines:</strong> Our machine-readable XML sitemap is available at 
+            <a href="/sitemap-index.xml" class="text-primary hover:underline ml-1">/sitemap-index.xml</a>
+          </p>
+        </div>
+      </div>
+
+    </div>
+  </main>
+</Layout>

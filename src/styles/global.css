@@ -1,0 +1,211 @@
+@import "tailwindcss";
+@plugin "tailwindcss-animate";
+
+@theme {
+  --color-border: hsl(var(--border));
+  --color-input: hsl(var(--input));
+  --color-ring: hsl(var(--ring));
+  --color-background: hsl(var(--background));
+  --color-foreground: hsl(var(--foreground));
+
+  --color-primary: hsl(var(--primary));
+  --color-primary-foreground: hsl(var(--primary-foreground));
+
+  --color-secondary: hsl(var(--secondary));
+  --color-secondary-foreground: hsl(var(--secondary-foreground));
+
+  --color-destructive: hsl(var(--destructive));
+  --color-destructive-foreground: hsl(var(--destructive-foreground));
+
+  --color-muted: hsl(var(--muted));
+  --color-muted-foreground: hsl(var(--muted-foreground));
+
+  --color-accent: hsl(var(--accent));
+  --color-accent-foreground: hsl(var(--accent-foreground));
+
+  --color-popover: hsl(var(--popover));
+  --color-popover-foreground: hsl(var(--popover-foreground));
+
+  --color-card: hsl(var(--card));
+  --color-card-foreground: hsl(var(--card-foreground));
+
+  --radius-lg: var(--radius);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-sm: calc(var(--radius) - 4px);
+
+  --font-sans: "Inter", ui-sans-serif, system-ui, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+}
+
+/*
+  The default border color has changed to `currentColor` in Tailwind CSS v4,
+  so we've added these compatibility styles to sure everything still looks the same as it did with v3.
+  If we ever want to remove these styles, we need to add an explicit border color to our markup.
+*/
+@layer base {
+  *,
+  ::after,
+  ::before,
+  ::backdrop,
+  ::file-selector-button {
+    border-color: var(--color-gray-200, currentColor);
+  }
+
+  body {
+    @apply bg-background text-foreground;
+  }
+}
+
+@layer base {
+  :root {
+    /* Refined Nightlife Theme */
+    --background: 224 20% 12%; /* Charcoal lighter variation (Cool dark grey) */
+    --foreground: 210 40% 98%;
+
+    --card: 224 20% 16%;       /* Slightly lighter charcoal for cards */
+    --card-foreground: 210 40% 98%;
+
+    --popover: 224 20% 16%;
+    --popover-foreground: 210 40% 98%;
+
+    --primary: 270 70% 60%;    /* True Purple (No pink tint) */
+    --primary-foreground: 210 40% 98%;
+
+    --secondary: 224 20% 25%;  /* Lighter charcoal/slate for secondary actions */
+    --secondary-foreground: 210 40% 98%;
+
+    --muted: 224 20% 25%;
+    --muted-foreground: 215 20% 70%;
+
+    --accent: 260 80% 70%;     /* Light Violet/Lavender for contrast, staying in purple family */
+    --accent-foreground: 210 40% 98%;
+
+    --destructive: 0 62.8% 30.6%;
+    --destructive-foreground: 210 40% 98%;
+
+    --border: 224 20% 25%;
+    --input: 224 20% 25%;
+    --ring: 270 70% 60%;
+
+    --radius: 0.75rem;
+  }
+}
+
+@layer utilities {
+  .bg-dot-pattern {
+    background-image: radial-gradient(circle, hsl(var(--foreground) / 0.1) 1px, transparent 1px);
+    background-size: 20px 20px;
+  }
+}
+
+/* ============================================
+   PageHeader Component Animations
+   ============================================ */
+
+/* Floating particles animation */
+@keyframes float {
+  0%, 100% {
+    transform: translateY(0) translateX(0);
+    opacity: 0.2;
+  }
+  25% {
+    transform: translateY(-20px) translateX(10px);
+    opacity: 0.4;
+  }
+  50% {
+    transform: translateY(-10px) translateX(-5px);
+    opacity: 0.2;
+  }
+  75% {
+    transform: translateY(-30px) translateX(15px);
+    opacity: 0.3;
+  }
+}
+
+.animate-float {
+  animation: float 15s ease-in-out infinite;
+}
+
+/* Typewriter cursor blink */
+@keyframes blink {
+  0%, 50% {
+    opacity: 1;
+  }
+  51%, 100% {
+    opacity: 0;
+  }
+}
+
+.animate-blink {
+  animation: blink 1s step-end infinite;
+}
+
+/* Neon light sliding effect */
+@keyframes slide-right {
+  0% {
+    transform: translateX(-100%);
+    opacity: 0;
+  }
+  50% {
+    opacity: 1;
+  }
+  100% {
+    transform: translateX(calc(100% + 192px));
+    opacity: 0;
+  }
+}
+
+.animate-slide-right {
+  animation: slide-right 3s ease-in-out infinite;
+}
+
+/* Slow pulsing for background glows */
+@keyframes pulse-slow {
+  0%, 100% {
+    opacity: 0.15;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.25;
+    transform: scale(1.1);
+  }
+}
+
+.animate-pulse-slow {
+  animation: pulse-slow 6s ease-in-out infinite;
+}
+
+/* Text shimmer effect */
+@keyframes text-shimmer {
+  0% {
+    background-position: 100% center;
+  }
+  100% {
+    background-position: -100% center;
+  }
+}
+
+.animate-text-shimmer {
+  animation: text-shimmer 4s ease-in-out infinite;
+}
+
+/* Equalizer bar animation */
+@keyframes equalizer {
+  0%, 100% {
+    transform: scaleY(1);
+  }
+  25% {
+    transform: scaleY(1.8);
+  }
+  50% {
+    transform: scaleY(0.6);
+  }
+  75% {
+    transform: scaleY(1.4);
+  }
+}
+
+.animate-equalizer {
+  animation: equalizer 1.2s ease-in-out infinite;
+  transform-origin: bottom;
+}
+
