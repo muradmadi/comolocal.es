@@ -211,45 +211,28 @@ export async function getAllEvents() {
 export async function getPostBySlug(slug: string) {
   const data = await wpQuery({
     query: `
-        query GetPost($uri: ID!) {
-            post(id: $uri, idType: URI) {
-                id
-                title
-                content
-                date
-                featuredImage {
-                    node {
-                        sourceUrl
-                        altText
-                    }
-                }
-                articleMeta {
-                    mentionedVenues {
-                        ... on Venue {
-                            title
-                            slug
-                            featuredImage {
-                                node {
-                                    sourceUrl
-                                    altText
-                                }
-                            }
-                            venueSchemaData {
-                                cocktailPrice
-                                currency
-                                entryFeeStatus
-                                noiseLevel
-                            }
+        query GetPostByName($slug: String!) {
+            posts(where: { name: $slug, status: PUBLISH }) {
+                nodes {
+                    id
+                    title
+                    slug
+                    content
+                    date
+                    featuredImage {
+                        node {
+                            sourceUrl
+                            altText
                         }
                     }
                 }
             }
         }
         `,
-    variables: { uri: slug }
+    variables: { slug }
   });
 
-  return data?.post;
+  return data?.posts?.nodes?.[0];
 }
 
 export async function getAllPosts() {
