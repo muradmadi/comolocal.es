@@ -88,7 +88,7 @@ const hasLiveEvents = displayEvents.some((event: Event) => {
            <EventCalendar client:visible events={displayEvents} />
       </div>
 
-      <script is:inline>
+      <script>
           const showMoreBtn = document.getElementById('show-more-btn');
           const hiddenEvents = document.querySelectorAll('.event-item.hidden');
           const PAGE_SIZE = 5;
