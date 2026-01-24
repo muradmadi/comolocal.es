@@ -12,7 +12,7 @@ if (!slug) {
   return Astro.redirect('/404');
 }
 
-const uri = `/blog/${slug}/`;
+const uri = `/${slug}/`;
 const post = await getPostBySlug(uri);
 
 if (!post) {
