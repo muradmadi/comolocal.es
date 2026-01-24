@@ -6,7 +6,7 @@ interface Props {
   siteUrl?: string;
 }
 
-const { event, siteUrl = 'https://comolocal.es' } = Astro.props;
+const { event, siteUrl = 'https://www.comolocal.es' } = Astro.props;
 const data = event.eventData;
 
 // Get venue info if available
@@ -17,7 +17,7 @@ const schema = {
   "@type": "Event",
   "name": event.title,
   "description": event.content?.replace(/<[^>]*>/g, '').substring(0, 200) || '',
-  "url": `${siteUrl}/events/${event.slug}`,
+  "url": `${siteUrl}/events/${event.slug}/`,
   "startDate": data.eventStart,
   "endDate": data.eventEnd,
   "eventStatus": "https://schema.org/EventScheduled",
@@ -29,7 +29,7 @@ const schema = {
     "location": {
       "@type": "Place",
       "name": venue.title,
-      "url": `${siteUrl}/venues/${venue.slug}`
+      "url": `${siteUrl}/venues/${venue.slug}/`
     }
   }),
   "organizer": {
