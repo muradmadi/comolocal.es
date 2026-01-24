@@ -10,7 +10,7 @@ import vercel from '@astrojs/vercel';
 
 // https://astro.build/config
 export default defineConfig({
-  site: 'https://comolocal.es',
+  site: 'https://www.comolocal.es',
   output: 'server',
   trailingSlash: 'always',
   adapter: vercel(),
