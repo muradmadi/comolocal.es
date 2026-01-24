@@ -6,6 +6,7 @@ import faviconSvg from '../assets/favicon/favicon.svg';
 import favicon96 from '../assets/favicon/favicon-96x96.png';
 import faviconIco from '../assets/favicon/favicon.ico';
 import appleTouchIcon from '../assets/favicon/apple-touch-icon.png';
+import ogDefaultImage from '../assets/favicon/web-app-manifest-512x512.png';
 import webManifest from '../assets/favicon/site.webmanifest?url';
 import Footer from '../components/layout/Footer.astro';
 import CookieConsent from '../components/CookieConsent.astro';
@@ -14,12 +15,19 @@ interface Props {
 	title?: string;
 	description?: string;
 	image?: string;
+	type?: 'website' | 'article';
 }
 
 const { 
 	title = "Comolocal | Party como un local",
-	description = "Find the best bars and nightlife in Madrid. Your guide to partying like a local." 
+	description = "Find the best bars and nightlife in Madrid. Your guide to partying like a local.",
+	image,
+	type = 'website'
 } = Astro.props;
+
+const siteUrl = 'https://comolocal.es';
+const canonicalUrl = new URL(Astro.url.pathname, siteUrl).href;
+const ogImage = image ? image : `${siteUrl}${ogDefaultImage.src}`;
 ---
 
 <!doctype html>
@@ -34,9 +42,28 @@ const {
 		<meta name="apple-mobile-web-app-title" content="Comolocal" />
 		<link rel="manifest" href={webManifest} />
 		<meta name="generator" content={Astro.generator} />
+		
+		<!-- Primary Meta Tags -->
 		<title>{title}</title>
 		<meta name="description" content={description} />
 		<meta name="keywords" content="Madrid nightlife, bars Madrid, nightlife guide, student parties Madrid, Comolocal" />
+		<link rel="canonical" href={canonicalUrl} />
+
+		<!-- Open Graph / Facebook -->
+		<meta property="og:type" content={type} />
+		<meta property="og:url" content={canonicalUrl} />
+		<meta property="og:title" content={title} />
+		<meta property="og:description" content={description} />
+		<meta property="og:image" content={ogImage} />
+		<meta property="og:site_name" content="Comolocal" />
+		<meta property="og:locale" content="en_US" />
+
+		<!-- Twitter -->
+		<meta name="twitter:card" content="summary_large_image" />
+		<meta name="twitter:url" content={canonicalUrl} />
+		<meta name="twitter:title" content={title} />
+		<meta name="twitter:description" content={description} />
+		<meta name="twitter:image" content={ogImage} />
 
 	</head>
 	<body class="bg-background text-foreground font-sans antialiased min-h-screen flex flex-col">
